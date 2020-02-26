@@ -151,7 +151,7 @@ set more off
 		qui:clonevar __my_tOuse = `touse'
 		
 		mata: _sige2      = *allest[3,25]
-		gen double __SiGma2 = .
+		qui:gen double __SiGma2 = .
 		mata: st_store(.,st_varindex(tokens("__SiGma2")),"`touse'",sqrt(_sige2))
 
 	tempfile mydata

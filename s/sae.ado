@@ -117,7 +117,7 @@ program sae, rclass
 				display as error "Please refer to Corral, Molina, and Nguyen (2020), this method has been shown to be less than ideal"
 				local 0 = subinstr(`"`0'"',char(34),"",.)
 				local 0 : list clean 0
-				povmap `0'
+				povmap `0' stage(second)
 				display as error "Please refer to Corral, Molina, and Nguyen (2020), this method has been shown to be less than ideal"
 			}
 			if (~inlist("`subcmd1'","ell","h3","elleb","reml", "lmm")){
