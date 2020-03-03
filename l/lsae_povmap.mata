@@ -1546,20 +1546,19 @@ pointer (transmorphic matrix) scalar f_pointer_clone(transmorphic matrix X) {
 function _ebcensus4(real matrix area1, real matrix etabs, real matrix etabs2, real matrix info1) {
 	_etabs = etabs
 	N = rows(info1)
-	cens_etas=J(N,(cols(etabs)-1),.)
+	cens_etas=J(N,1,etabs2[1,2..3])
 	for(i=1; i<=N; i++) {
 		k=0
 		for(j=1;((j<=rows(_etabs)) & (k==0));j++) {
 			if (area1[i,1]==_etabs[j,1]) {
 				cens_etas[i,.] = _etabs[|j,2\j,cols(_etabs)|]
-				if (j!=rows(_etabs)) _etabs = _etabs[|j+1,. \ rows(_etabs),.|]
 				k=1
 			}
-			if ((k==0) & (j==rows(_etabs))) cens_etas[i,.] = _etabs[1,2..cols(_etabs)]
 		}
 	}
 	return(cens_etas)
 }
+
 
 //To assign etas and sigetas to census areas for EB
 function _ebcensus5(real matrix area1, real matrix etabs, real matrix info1) {
@@ -2886,7 +2885,6 @@ void _s2sc_sim_molina(string scalar xvar,
 	EB    		= strtoreal(st_local("ebest"))	
 	lg			= strtoreal(st_local("lny"))
 	bcox        = strtoreal(st_local("bcox"))		     //Box Cox conversion
-	mycons      = strtoreal(st_local("constant"))
 	LAMBDA      = strtoreal(st_local("lambda"))			//Lambda for boxcox
 	varinmod	= tokens(st_local("varinmodel"))	
 	//pointer(real matrix) rowvector agginfo	
@@ -3129,9 +3127,9 @@ void _s2sc_sim_molina(string scalar xvar,
 				
 		//Write col by col to the mata data
 		if (st_local("ydump")!="") { 
-			if (bcox==1 & lg==1) for (m=1; m<=count; m++) fputmatrix(yd,select(exp(_unbcsk(xb[.,m],LAMBDA,mycons)),mask))
+			if (bcox==1 & lg==1) for (m=1; m<=count; m++) fputmatrix(yd,select(exp(_unbcsk(xb[.,m],LAMBDA)),mask))
 			if (bcox==0 & lg==1) for (m=1; m<=count; m++) fputmatrix(yd, exp(select(xb[.,m], mask))) 
-			if (bcox==1 & lg==0) for (m=1; m<=count; m++) fputmatrix(yd, select(_unbcsk(xb[.,m],LAMBDA,mycons), mask))
+			if (bcox==1 & lg==0) for (m=1; m<=count; m++) fputmatrix(yd, select(_unbcsk(xb[.,m],LAMBDA), mask))
 			if (bcox==0 & lg==0) for (m=1; m<=count; m++) fputmatrix(yd, select(xb[.,m], mask))
 		}
 		
@@ -3140,9 +3138,9 @@ void _s2sc_sim_molina(string scalar xvar,
 		for (m=1; m<=count; m++) {
 			block0 = J(1,5,.)
 			wt_m = wt_v
-			if (bcox==1 & lg==1) y = exp(_unbcsk(xb[.,m],LAMBDA,mycons))
+			if (bcox==1 & lg==1) y = exp(_unbcsk(xb[.,m],LAMBDA))
 			if (bcox==0 & lg==1) y = exp(xb[.,m]) 
-			if (bcox==1 & lg==0) y = _unbcsk(xb[.,m],LAMBDA,mycons)
+			if (bcox==1 & lg==0) y = _unbcsk(xb[.,m],LAMBDA)
 			if (bcox==0 & lg==0) y = xb[.,m]
 			if (colmissing(y)>0) {
 				_editmissing(y, 0)	
@@ -3285,7 +3283,6 @@ void _s2sc_sim_ebp(string scalar xvar,
 	lg			= strtoreal(st_local("lny"))         //Logarithm conversion
 	bcox        = strtoreal(st_local("bcox"))		     //Box Cox conversion
 	LAMBDA      = strtoreal(st_local("lambda"))			//Lambda for boxcox
-	mycons      = strtoreal(st_local("constant"))
 	
 	varinmod	= tokens(st_local("varinmodel"))	 //Variables needed to bring from mata census
 	indlist     = tokens(st_local("indicators"))     //Indicator list
@@ -3502,9 +3499,9 @@ void _s2sc_sim_ebp(string scalar xvar,
 			for (m=1; m<=1; m++) {
 				block0 = J(1,5,.)
 				wt_m = wt_v
-				if (bcox==1 & lg==1) y = exp(_unbcsk(xb1[.,m],LAMBDA,mycons))
+				if (bcox==1 & lg==1) y = exp(_unbcsk(xb1[.,m],LAMBDA))
 				if (bcox==0 & lg==1) y = exp(xb1[.,m]) 
-				if (bcox==1 & lg==0) y = _unbcsk(xb1[.,m],LAMBDA,mycons)
+				if (bcox==1 & lg==0) y = _unbcsk(xb1[.,m],LAMBDA)
 				if (bcox==0 & lg==0) y = xb1[.,m]
 				if (colmissing(y)>0) {
 					_editmissing(y, 0)	
@@ -3599,15 +3596,15 @@ void _s2sc_sim_ebp(string scalar xvar,
 				wt_m = wsvy
 
 				if (doone==1){
-					if (bcox==1 & lg==1) y = exp(_unbcsk(xsvy,LAMBDA,mycons))
+					if (bcox==1 & lg==1) y = exp(_unbcsk(xsvy,LAMBDA))
 					if (bcox==0 & lg==1) y = exp(xsvy) 
-					if (bcox==1 & lg==0) y = _unbcsk(xsvy,LAMBDA,mycons)
+					if (bcox==1 & lg==0) y = _unbcsk(xsvy,LAMBDA)
 					if (bcox==0 & lg==0) y = xsvy
 				}
 				else{
-					if (bcox==1 & lg==1) y = exp(_unbcsk(ysvy,LAMBDA,mycons))
+					if (bcox==1 & lg==1) y = exp(_unbcsk(ysvy,LAMBDA))
 					if (bcox==0 & lg==1) y = exp(ysvy) 
-					if (bcox==1 & lg==0) y = _unbcsk(ysvy,LAMBDA,mycons)
+					if (bcox==1 & lg==0) y = _unbcsk(ysvy,LAMBDA)
 					if (bcox==0 & lg==0) y = ysvy
 				}
 		
@@ -3694,9 +3691,9 @@ void _s2sc_sim_ebp(string scalar xvar,
 			} //m
 		}
 		if (appendit==0 & doone==1){
-			if (bcox==1 & lg==1) y = exp(_unbcsk(xsvy,LAMBDA,mycons))
+			if (bcox==1 & lg==1) y = exp(_unbcsk(xsvy,LAMBDA))
 			if (bcox==0 & lg==1) y = exp(xsvy) 
-			if (bcox==1 & lg==0) y = _unbcsk(xsvy,LAMBDA,mycons)
+			if (bcox==1 & lg==0) y = _unbcsk(xsvy,LAMBDA)
 			if (bcox==0 & lg==0) y = xsvy
 		}
 		
@@ -3776,15 +3773,11 @@ function complex_eta(ysvy, xsvy, wsvy, svyinfo, sigma2U, sigma2e, bsim, areasvy)
 }
 
 //Box Cox untransform, note that negative values will be negative
-function _unbcsk(y,L,mcons){
-	oute = (((y*L):+1):^(1/L))
-	return(oute:-mcons)
+function _unbcsk(y,L){
+	return(((y*L):+1):^(1/L))
 }
-
-function _bcsk(y,L,mcons){
-	oute = y:+mcons
-	oute = ((oute:^L):-1):/L
-	return(oute)
+function _bcsk(y,L){
+	return(((y:^L):-1):/L)
 }
 
 //lnskew0
