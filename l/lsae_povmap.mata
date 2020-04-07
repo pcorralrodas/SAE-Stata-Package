@@ -2933,6 +2933,9 @@ void _s2sc_sim_molina(string scalar xvar,
 	colsyh  = cols(yh)
 	colsyh2 = cols(yh2)
 	
+	coladd = (st_local("addvars")!="" ? cols(tokens(st_local("addvars"))) : 0) 
+
+	
 	//Check if X and other variables (varinmodel local), Z and Yhats are in the code
 	e3499 = _fvarscheck(varinmod, varlist)
 	if (z1[1]  != "__mz1_000")  e3499 = _fvarscheck(z1, varlist)
@@ -3002,6 +3005,7 @@ void _s2sc_sim_molina(string scalar xvar,
 			}
 		}
 	}
+	
 	nges = cols(gelist)
 	if (nges>0) {
 		for (ind=1; ind<=nges; ind++) {
@@ -3013,13 +3017,16 @@ void _s2sc_sim_molina(string scalar xvar,
 
 	if (npovlines>0 & nfgts>0 & plreal==0) {
 		plvalue = J(1,npovlines, NULL)
-		for (l=1; l<=npovlines; l++) plvalue[l] = &((_fgetcoldata(_fvarindex(pl[l], varname), fhcensus, p0, p1-p0), mask))		
-	}		
-	
+		
+		for (l=1; l<=npovlines; l++){
+		    plvalue[l] = &((_fgetcoldata(_fvarindex(pl[l], varlist), fhcensus, p0, p1-p0), mask))		
+		}
+	}	
+
 	
 	if (st_local("ydump")!="") { 
-		if (st_local("plinevar")!="") ncols = 3 + sim + 1 
-		else ncols = 3 + sim 
+		if (st_local("plinevar")!="") ncols = 3 + sim + 1 +coladd
+		else ncols = 3 + sim +coladd
 		yd = fopen(st_local("ydump"),"rw")		
 		//"DATA_MATRIX", "VARIABLE_MATRIX" are removed from the matrix variable
 		varname = "_ByID", "_ID", "_WEIGHT"
@@ -3050,7 +3057,7 @@ void _s2sc_sim_molina(string scalar xvar,
 		block = J(1, 5 + nfgts*npovlines + nges,.)
 		sim0 = 1
 
-	
+
 	for (s=1; s<=sim; s=s+count) {
 			
 			if (doone==1){
@@ -3165,8 +3172,8 @@ void _s2sc_sim_molina(string scalar xvar,
 						rgap = 1:-(y:/ pl[l])
 					}
 					else {
-						wt_p = (y:<= *plvalue[l]):*wt_m
-						rgap = 1:-(y:/ *plvalue[l])				
+						wt_p = (y:<= (*plvalue[l])[.,1]):*wt_m
+						rgap = 1:-(y:/ (*plvalue[l])[.,1])				
 					}
 					for (ind=1; ind<=nfgts; ind++) {
 						if (fgtlist[ind]=="fgt0") currfgt = running[.,1], quadrunningsum(wt_p,0)
