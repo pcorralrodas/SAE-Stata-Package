@@ -170,6 +170,8 @@ set more off
 	local plines  `plines'         //Poverty Line
 	local plinevar `plinevar'      //Variable with pov line
 	
+	if ("`plinevar'"!="") local plines `plinevar'
+	
 	//local pwcensus  	    //Census weightvar _ specified above
 	
 	local hhid1 `uniqid'           //Unique identifier in Census
