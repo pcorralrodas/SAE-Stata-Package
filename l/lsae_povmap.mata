@@ -3244,6 +3244,16 @@ void _s2sc_sim_molina(string scalar xvar,
 	xb1=xb = area_v = wt_v = wt_m = pl_v = NULL
 	block0 = y = wt0 = wt = area = wy = running = wt_p = rgap = plvalue = lny = wlny = info = areaid = nhh = NULL
 	
+	//Add additional variables to the ydump
+	if (st_local("ydump")!="") {
+		if (st_local("addvars")!="") {
+			addvarlist = tokens(st_local("addvars"))
+			for (v=1; v<=coladd; v++) fputmatrix(yd, select(_fgetcoldata(_fvarindex(addvarlist[v], varlist), fhcensus, p0, p1-p0), mask)) //_ID
+		}
+		fclose(yd)	
+	}
+	fclose(fhcensus)
+	
 	//export results to Stata
 	block = block[2..rows(block),.]
 	_sort(block, (2,1))
@@ -3263,7 +3273,6 @@ void _s2sc_sim_molina(string scalar xvar,
 	st_store(.,.,outsim)
 	outsim = NULL
 	
-	if (st_local("ydump")!="") fclose(yd)
 	st_local("_itran","0")
 }
 //Does the new simulation for efficient MSE estimation

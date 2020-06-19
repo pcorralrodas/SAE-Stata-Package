@@ -126,6 +126,11 @@ set more off
 		local lhs `Thedep'
 		local lambda = r(lambda)
 	}
+	
+		local yhatlist
+		forv v=1(1)`mcrep' {
+			local yhatlist "`yhatlist' _YHAT`v'"
+		}
 
 	povmap `lhs' `_Xx' if `touse23'==1 [aw=`wvar'], area(`area') ///
 	varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest uniq(`uniqid') seed(`seed') stage(first) new
