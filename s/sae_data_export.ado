@@ -1,7 +1,8 @@
-*! sae_data_export version 0.2, April 9, 2017
+*! sae_data_export version 0.3.0  July 3, 2020
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 *! Paul Andres Corral Rodas - pcorralrodas@worldbank.org
-
+*! Joao Pedro Azevedo - jazevedo@worldbank.org
+*! Qinghua Zhao  
 cap program drop sae_data_export
 program define sae_data_export
 	syntax,  matasource(string)   [numfiles(integer 1) prefix(string) datasave(string) saveold]

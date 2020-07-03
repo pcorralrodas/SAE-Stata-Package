@@ -1,7 +1,8 @@
-*! version 0.2.5  31May2017
-*! Copyright (C) World Bank 2016-17 - Minh Cong Nguyen & Paul Andres Corral Rodas
+*! version 0.3.0  July 3, 2020
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 *! Paul Andres Corral Rodas - pcorralrodas@worldbank.org
+*! Joao Pedro Azevedo - jazevedo@worldbank.org
+*! Qinghua Zhao  
 
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

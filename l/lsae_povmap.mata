@@ -1,8 +1,9 @@
 //s2sc and povmap mata functions
-*! lsae_povmap 0.5.2 18 April 2018
-*! Copyright (C) World Bank 2016-17 - Minh Cong Nguyen & Paul Andres Corral Rodas
+*! lsae_povmap 0.6.0 July 3, 2020
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 *! Paul Andres Corral Rodas - pcorralrodas@worldbank.org
+*! Joao Pedro Azevedo - jazevedo@worldbank.org
+*! Qinghua Zhao  
 
 * This program is free software: you can redistribute it and/or modify
 * it under the ter		ms of the GNU General Public License as published by

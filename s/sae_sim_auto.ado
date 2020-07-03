@@ -1,7 +1,6 @@
 *! version 0.1.1  22Dec2018
-*! Copyright (C) World Bank 2018-19
-*  Paul Corral - World Bank Group 
-*  Alexandru Cojocaru - World Bank Group
+*!  Paul Corral - World Bank Group 
+*!  Alexandru Cojocaru - World Bank Group
 
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

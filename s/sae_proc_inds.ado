@@ -1,7 +1,8 @@
 *! sae_proc_inds.ado version 0.2.0  02jun2017
-*! Copyright (C) World Bank 2016-17 - Minh Cong Nguyen & Paul Andres Corral Rodas
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 *! Paul Andres Corral Rodas - pcorralrodas@worldbank.org
+*! Joao Pedro Azevedo - jazevedo@worldbank.org
+*! Qinghua Zhao  
 
 cap program drop sae_proc_inds
 program define sae_proc_inds

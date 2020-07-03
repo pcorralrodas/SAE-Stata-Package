@@ -1,5 +1,4 @@
 *! version 0.1 September 2, 2019
-*! Copyright (C) World Bank 2019 - Minh Cong Nguyen & Paul Andres Corral Rodas
 *! Paul Corral - pcorralrodas@worldbank.org 
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 
