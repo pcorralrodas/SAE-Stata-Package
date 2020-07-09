@@ -2880,6 +2880,9 @@ void _s2sc_sim_molina(string scalar xvar,
 	
 	boots       = 0
 	count       = 1
+	
+	//Constant for BOX cox
+	lacons      = strtoreal(st_local("constant"))
 
 	etanorm 	= strtoreal(st_local("etanormal"))
 	epsnorm 	= strtoreal(st_local("epsnormal"))
@@ -2898,8 +2901,7 @@ void _s2sc_sim_molina(string scalar xvar,
 	gelist  = tokens(st_local("gelist"))
 	pl      = strtoreal(tokens(plvar))
 	plreal = 1
-	if (missing(pl)>0) {
-		pl = tokens(plvar)	
+	if (missing(pl)>0) {		pl = tokens(plvar)	
 		plreal = 0
 	}
 	
@@ -3135,9 +3137,9 @@ void _s2sc_sim_molina(string scalar xvar,
 				
 		//Write col by col to the mata data
 		if (st_local("ydump")!="") { 
-			if (bcox==1 & lg==1) for (m=1; m<=count; m++) fputmatrix(yd,select(exp(_unbcsk(xb[.,m],LAMBDA)),mask))
+			if (bcox==1 & lg==1) for (m=1; m<=count; m++) fputmatrix(yd,select(exp(_unbcsk(xb[.,m],LAMBDA):-lacons),mask))
 			if (bcox==0 & lg==1) for (m=1; m<=count; m++) fputmatrix(yd, exp(select(xb[.,m], mask))) 
-			if (bcox==1 & lg==0) for (m=1; m<=count; m++) fputmatrix(yd, select(_unbcsk(xb[.,m],LAMBDA), mask))
+			if (bcox==1 & lg==0) for (m=1; m<=count; m++) fputmatrix(yd, select((_unbcsk(xb[.,m],LAMBDA):-lacons), mask))
 			if (bcox==0 & lg==0) for (m=1; m<=count; m++) fputmatrix(yd, select(xb[.,m], mask))
 		}
 		
@@ -3146,9 +3148,9 @@ void _s2sc_sim_molina(string scalar xvar,
 		for (m=1; m<=count; m++) {
 			block0 = J(1,5,.)
 			wt_m = wt_v
-			if (bcox==1 & lg==1) y = exp(_unbcsk(xb[.,m],LAMBDA))
+			if (bcox==1 & lg==1) y = exp(_unbcsk(xb[.,m],LAMBDA):-lacons)
 			if (bcox==0 & lg==1) y = exp(xb[.,m]) 
-			if (bcox==1 & lg==0) y = _unbcsk(xb[.,m],LAMBDA)
+			if (bcox==1 & lg==0) y = _unbcsk(xb[.,m],LAMBDA):-lacons
 			if (bcox==0 & lg==0) y = xb[.,m]
 			if (colmissing(y)>0) {
 				_editmissing(y, 0)	
@@ -3173,8 +3175,8 @@ void _s2sc_sim_molina(string scalar xvar,
 						rgap = 1:-(y:/ pl[l])
 					}
 					else {
-						wt_p = (y:<= (*plvalue[l])[.,1]):*wt_m
-						rgap = 1:-(y:/ (*plvalue[l])[.,1])				
+						wt_p = (y:<= select((*plvalue[l])[.,1], mask)):*wt_m
+						rgap = 1:-(y:/ select((*plvalue[l])[.,1],mask))				
 					}
 					for (ind=1; ind<=nfgts; ind++) {
 						if (fgtlist[ind]=="fgt0") currfgt = running[.,1], quadrunningsum(wt_p,0)
