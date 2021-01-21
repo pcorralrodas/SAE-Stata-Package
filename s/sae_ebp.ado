@@ -1,4 +1,5 @@
 *! version 0.1 September 2, 2019
+*! Copyright (C) World Bank 2019 - Minh Cong Nguyen & Paul Andres Corral Rodas
 *! Paul Corral - pcorralrodas@worldbank.org 
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 
@@ -33,6 +34,7 @@ program define sae_ebp, eclass byable(recall)
 	UNIQid(varname numeric)
 	lny
 	bcox
+	lnskew
 	CONStant(real 0.0)
 	seed(string)
 	plinevar(string) 
@@ -128,6 +130,16 @@ set more off
 	if ("`bcox'"!="") local bcox = 1
 	else              local bcox = 0
 	
+	if ("`lnskew'"!="") local lnskew = 1
+	else                local lnskew = 0
+	
+	if (((`lnskew'+`bcox') ==2)){
+		display as error "lnskew option can's be used with bcox option"
+		error 198
+		exit
+	}
+
+	
 	if ("`appendsvy'"!="") local appendsvy=1
 	else                   local appendsvy=0
 	
@@ -155,6 +167,19 @@ set more off
 		local lhs `Thedep'
 		local lambda = r(lambda)
 	}
+	if (`lnskew'==1 & `lny'==1){
+		tempvar Thedep
+		lnskew0 double `Thedep' = exp(`lhs') if `touse23'==1
+		local lhs `Thedep'
+		local lambda = r(gamma)
+	}
+	if (`lnskew'==1 & `lny'==0){
+		tempvar Thedep
+		lnskew0 double `Thedep' = `lhs' if `touse23'==1
+		local lhs `Thedep'
+		local lambda = r(gamma)
+	}
+
 	
 	xtmixed `lhs' `_Xx' if `touse23'==1 || `area':, reml
 	
@@ -301,11 +326,11 @@ set more off
 			use `mydata', clear
 			qui:mata: st_addvar("double","_NeWy")
 			//Add unboxcoxing!! This is why you are getting larger MSE
-			if (`lny'==0 & `bcox'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", _MyebpY)                      //New Y for the bootstrap
-			if (`lny'==1 & `bcox'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", ln(_MyebpY))                  //New Y for the bootstrap
-			if (`lny'==0 & `bcox'==1) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", _bcsk(_MyebpY,`lambda', `constant'))      //New Y for the bootstrap
-			if (`lny'==1 & `bcox'==1) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", (_bcsk(ln(_MyebpY),`lambda',`constant'))) //New Y for the bootstrap
-			
+			if (`lny'==0 & `bcox'==0 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", _MyebpY)                      //New Y for the bootstrap
+			if (`lny'==1 & `bcox'==0 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", ln(_MyebpY))                  //New Y for the bootstrap
+			if (`lny'==0 & `bcox'==1 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", _bcsk(_MyebpY,`lambda', `constant'))      //New Y for the bootstrap
+			if (`lny'==1 & `bcox'==1 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", (_bcsk(ln(_MyebpY),`lambda',`constant'))) //New Y for the bootstrap
+			if (`lnskew'==1)						qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", (ln(_MyebpY:-`lambda')))                  //New Y for the bootstrap
 			qui:xtmixed _NeWy `_Xx' if `touse'==1 || `area':, reml difficult
 			predict double _EtaA, reffects
 				local doagain = e(converged)

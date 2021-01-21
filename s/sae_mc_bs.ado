@@ -1,4 +1,5 @@
 *! version 0.1 September 2, 2019
+*! Copyright (C) World Bank 2019 - Minh Cong Nguyen & Paul Andres Corral Rodas
 *! Paul Corral - pcorralrodas@worldbank.org 
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 
@@ -33,6 +34,7 @@ program define sae_mc_bs, eclass byable(recall)
 	[
 	lny
 	bcox
+	lnskew
 	CONStant(real 0.0)
 	Zvar(varlist numeric fv) 
 	yhat(varlist numeric fv) 
@@ -111,10 +113,18 @@ set more off
 		local wvar `w'
 	}
 	
-	if ("`lny'"!="")  local lny = 1
-	else              local lny = 0
-	if ("`bcox'"!="") local bcox = 1
-	else              local bcox = 0
+	if ("`lny'"!="")    local lny = 1
+	else                local lny = 0
+	if ("`bcox'"!="")   local bcox = 1
+	else                local bcox = 0
+	if ("`lnskew'"!="") local lnskew = 1
+	else                local lnskew = 0
+	
+	if (((`lnskew'+`bcox') ==2)){
+		display as error "lnskew option can's be used with bcox option"
+		error 198
+		exit
+	}
 	
 *===============================================================================
 // Run model...
@@ -125,11 +135,18 @@ set more off
 		local lhs `Thedep'
 		local lambda = r(lambda)
 	}
-	
-		local yhatlist
-		forv v=1(1)`mcrep' {
-			local yhatlist "`yhatlist' _YHAT`v'"
-		}
+	if (`lnskew'==1 & `lny'==1){
+		tempvar Thedep
+		lnskew0 double `Thedep' = exp(`lhs') if `touse23'==1
+		local lhs `Thedep'
+		local lambda = r(gamma)
+	}
+	if (`lnskew'==1 & `lny'==0){
+		tempvar Thedep
+		lnskew0 double `Thedep' = `lhs' if `touse23'==1
+		local lhs `Thedep'
+		local lambda = r(gamma)
+	}
 
 	povmap `lhs' `_Xx' if `touse23'==1 [aw=`wvar'], area(`area') ///
 	varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest uniq(`uniqid') seed(`seed') stage(first) new
@@ -173,8 +190,6 @@ set more off
 	
 	local plines  `plines'         //Poverty Line
 	local plinevar `plinevar'      //Variable with pov line
-	
-	if ("`plinevar'"!="") local plines `plinevar'
 	
 	//local pwcensus  	    //Census weightvar _ specified above
 	
