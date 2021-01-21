@@ -6,7 +6,7 @@
 {title:Title}
 
 {p2colset 5 24 26 2}{...}
-{p2col :{cmd:sae model/sim ell} {hline 1}} Replicates ELL methods and is similar to PovMap - based on Elbers, Lanjouw, and Lanjouw (2010). 
+{p2col :{cmd:sae model/sim ell} {hline 1}} Replicates ELL methods and is similar to PovMap - based on Elbers, Lanjouw, and Lanjouw (2002). 
 {p2colreset}{...}
 
 {title:Syntax}
@@ -185,7 +185,7 @@ jazevedo@worldbank.org{p_end}
 Molina, I., Marhuenda, Y. (2015). R package sae: Methodology.
 
 {pstd}
-Corral, P., Molina, I., Nguyen, M. (2020). Pull your small area estimates up by your bootstraps, MIMEO.
+Corral, P., Molina, I., Nguyen, M. (2020). Pull your small area estimates up by your bootstraps, World Bank Policy Research Working Paper 9256.
 
 {pstd}
 Molina, I. and Rao, J. (2010). Small area estimation of poverty indicators. Canadian Journal of Statistics, 38(3):369–385.

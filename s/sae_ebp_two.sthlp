@@ -1,19 +1,24 @@
 {smcl}
-{* *! version 1.0.0  11Jan2020}{...}
-{cmd:help sae_mc_bs}
+{* *! version 1.0.0  17Dec2020}{...}
+{cmd:help sae_ebp_twofold}
 {hline}
 
 {title:Title}
 
 {p2colset 5 24 26 2}{...}
-{p2col :{cmd:sae sim h3/elleb} {hline 1}} Command for fitting modeal and proceeding to simulation stage using H3 or ELL fitted model. Monte Carlo EB estimation and Bootstrap MSE similar to Molina and Rao (2010). 
+{p2col :{cmd:sae_ebp} {hline 1}} Restricted max. likelihood fitted model with Marhuenda et al. (2017) twofold nested error with EB estimation and Bootstrap MSE. {p_end}
 {p2colreset}{...}
 
 {title:Syntax}
 
 {p 8 23 2}
-{opt sae sim h3/elleb} {varlist} {ifin} {weight} {cmd:,}
+{opt sae model reml2} {varlist} {ifin} {cmd:,}
 {opt area(varname)}
+
+{p 8 23 2}
+{opt sae sim reml2} {varlist} {ifin} {cmd:,}
+{opt subarea(varname numeric)}
+{opt area(numlist max=1)}
 {opt UNIQid(varname numeric)}
 {opt mcrep(integer)}
 {opt bsrep(integer)}
@@ -22,29 +27,40 @@
 {opt aggids(numlist sort)}
 {opt pwcensus(string)}
 [
+{opt pwsurvey(string)}
 {opt lny}
 {opt bcox}
 {opt lnskew}
 {opt CONStant(real 0.0)}
-{opt Zvar(varlist numeric fv)} 
-{opt yhat(varlist numeric fv)} 
-{opt yhat2(varlist numeric fv)}
 {opt seed(string)}
 {opt plinevar(string)} 
 {opt PLINEs(numlist sort)}
-{opt ydump(string)}
-{opt addvars(varlist numeric fv)}
+{opt appendsvy}
 ]
 
 {title:Description}
 
 {pstd}
-{cmd:sae sim h3/elleb} Implements the simulation stage using Henderson's Method III variance decomposition or ELL's variance decomposition to obtain EB small area estimates.
+{cmd:sae model/sim reml} Supports Molina and Rao's (2010) EB small area estimation methods. Translated from R's sae library from Molina and Marhuenda. 
 
 {title:Options}
 
+{marker Modeling}{...}
+{dlgtab:Modeling}
 {synopthdr:Required}
 {synoptline}
+{phang}
+{opt subarea(varname)} Option is necessary and indicates variable denoting level of area effect. The only constraint is that the variable must be numeric and should match across datasets (survey and census). The variable must follow a hierarchical structure similar to the one proposed by Zhao (2006). SSAAAMMMM, where SS indicate states, AA indicate areas, and MMMM indicate municipalities.
+
+{phang}
+{opt area(varname)} Option is necessary and indicates the aggregation level for the larger area. Values placed here tell the command how many digits to the left to move the hierarchical id placed in the subarea() option to arrive at the larger area. For example using the id from above, if the random effect for the larger area should correspond to areas, then here you should place a value of 4. Note that the structure of the id needs to be the same across Census and survey data.
+
+
+{marker Simulation}{...}
+{dlgtab:Simulation}
+{synopthdr:Required}
+{synoptline}
+{phang}
 
 {phang}
 {opt area(varname)} Option is necessary and indicates variable denoting level of area effect. The only constraint is that the variable must be numeric and should match across datasets (survey and census), although it is recommended it follows a hierarchical structure similar to the one proposed by Zhao (2006).
@@ -75,13 +91,7 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 {synoptline}
 
 {phang}
-{opt Zvar(varlist numeric fv)} The zvar option is necessary for specifying the alpha model, the user must place the independent variables of the alpha model (Heteroskedasticity) under the option.
-
-{phang}
-{opt yhat(varlist numeric fv)} The yhat option is also a part of the alpha model. Variables listed here will be interacted with the predicted y hat from the OLS model.
-
-{phang}
-{opt yhat2(varlist numeric fv)} The yhat2 option is also a part of the alpha model. Variables listed here will be interacted with the predicted y hat squared from the OLS model.
+{opt pwsurvey(string)} Optional, and only necessary if users are using the appendsvy option.
 
 {phang}
 {opt lny} option indicates that the dependent variable in the welfare model is in log form. This is relevant for the second stage of the analysis in order to get appropriate simulated values.
@@ -105,25 +115,15 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 {opt PLINEs(numlist sort)} option allows users to explicitly indicate the threshold to be used, this option is preferred when the threshold is constant across all observations. Additionally, it is possible to specify multiple lines, separated by a space.
 
 {phang}
-{opt ydump(string)} The user must provide path and filename for a Mata format dataset to be created with the simulated dependent variables. This can then be exported to Stata, see sae data export
+{opt appendsvy} Option allows for full implementation of Molina and Rao's EB predictor, and ensures EB estimates utilize sampled observations and non-sampled observations. If option is not specified it will implement Census EB, see Corral, Molina, Nguyen (2020).
 
-{phang}
-{opt addvars(varlist numeric fv)} The addvars option allows users to add variables to the dataset created from the simulations. These variables must have been included into the target dataset created with the sae data import command.
-
-
-{title:Examples}
-
-//H3-EB estimates
-sae sim h3 Y x1 x2 x3 x4 x5 x6,  area(area)  ///
+{title:Example}
+sae sim reml Y x1 x2 x3 x4 x5 x6,  area(area)  ///
 mcrep(200) bsrep(200) matin("census") lny seed(31916) ///
 pwcensus(hhsize) indicators(FGT0 FGT1 FGT2) aggids(0) uniq(hhid_n) plines(16.2)
 
-//ELL-EB estimates
-sae sim elleb Y x1 x2 x3 x4 x5 x6,  area(area)  ///
-mcrep(200) bsrep(200) matin("census") lny seed(31916) ///
-pwcensus(hhsize) indicators(FGT0 FGT1 FGT2) aggids(0) uniq(hhid_n) plines(16.2)
 
-{title:Authors:}
+{title:Author:}
 
 {pstd}
 Paul Corral{break}
@@ -131,26 +131,12 @@ The World Bank - Poverty and Equity Global Practice {break}
 Washington, DC{break}
 pcorralrodas@worldbank.org{p_end}
 
-{pstd}
-Minh Cong Nguyen{break}
-The World Bank - Poverty and Equity Global Practice {break}
-Washington, DC{break}
-mnguyen3@worldbank.org{p_end}
-
 
 {title:References}
 
 {pstd}
-Molina, I., Marhuenda, Y. (2015). R package sae: Methodology.
+Marhuenda, Y., Molina, I., Morales, D., & Rao, J. (2017). Poverty mapping in small areas under a twofold nested error regression model. Journal of the Royal Statistical Society: Series A (Statistics in Society), 180 (4), 1111–1136.
 
-{pstd}
-Corral, P., Molina, I., Nguyen, M. (2020). Pull your small area estimates up by your bootstraps, World Bank Policy Research Working Paper 9256.
-
-{pstd}
-Molina, I. and Rao, J. (2010). Small area estimation of poverty indicators. Canadian Journal of Statistics, 38(3):369–385.
-
-{pstd}
-Van der Weide, R. (2014). GLS estimation and empirical bayes prediction for linear mixed models with heteroskedasticity and sampling weights: a background study for the povmap project. World Bank Policy Research Working Paper 7028.
 
 
 

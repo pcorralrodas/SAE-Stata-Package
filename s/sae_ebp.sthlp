@@ -29,6 +29,7 @@
 {opt pwsurvey(string)}
 {opt lny}
 {opt bcox}
+{opt lnskew}
 {opt CONStant(real 0.0)}
 {opt seed(string)}
 {opt plinevar(string)} 
@@ -95,6 +96,9 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 {opt bcox} Option tells command to execute bcskew0 (Box-Cox transform - Zero skewness) on the dependent variable of your model.
 
 {phang}
+{opt lnskew} Option tells command to execute lnskew0 (log shift transform - Zero skewness) on the dependent variable of your model.
+
+{phang}
 {opt CONStant(real 0.0)} Option adds constant value to dependent variable when doing Box-Cox transformation. If bcox is not specified this is irrelevant.
 
 {phang}
@@ -139,7 +143,7 @@ Molina, I., Marhuenda, Y. (2015). R package sae: Methodology.
 Molina, I., & Marhuenda, Y. (2015). sae: An R package for small area estimation. The R Journal, 7(1), 81-98.
 
 {pstd}
-Corral, P., Molina, I., Nguyen, M. (2020). Pull your small area estimates up by your bootstraps, MIMEO.
+Corral, P., Molina, I., Nguyen, M. (2020). Pull your small area estimates up by your bootstraps, World Bank Policy Research Working Paper 9256.
 
 {pstd}
 Molina, I. and Rao, J. (2010). Small area estimation of poverty indicators. Canadian Journal of Statistics, 38(3):369–385.
