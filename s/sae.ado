@@ -68,6 +68,9 @@ program sae, rclass
 		else if ("`subcmd1'"=="reml") {
 			sae_ebp `0' model mcrep(0) bsrep(0) matin(NO) pwcensus(XX) indicators(fgt0) aggids(0) pwsurvey(XX)
 		}
+		else if ("`subcmd1'"=="reml2") {
+			sae_ebp_two `0' model mcrep(0) bsrep(0) matin(NO) pwcensus(XX) indicators(fgt0) aggids(0) pwsurvey(XX)
+		}
 		else {
 			if ("`subcmd1'"=="") {
 				di as smcl as err "syntax error"
@@ -102,6 +105,11 @@ program sae, rclass
 			local 0 = subinstr(`"`0'"',char(34),"",.)
 			local 0 : list clean 0
 			sae_ebp `0'
+		}
+		else if ("`subcmd1'"=="reml2") {
+			local 0 = subinstr(`"`0'"',char(34),"",.)
+			local 0 : list clean 0
+			sae_ebp_two `0'
 		}	
 		else{
 			if ("`subcmd1'"=="h3"){
