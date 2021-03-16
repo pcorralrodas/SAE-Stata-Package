@@ -93,9 +93,6 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 {opt lnskew} Option tells command to execute lnskew0 (log shift transform - Zero skewness) on the dependent variable of your model.
 
 {phang}
-{opt CONStant(real 0.0)} Option adds constant value to dependent variable when doing Box-Cox transformation. If bcox is not specified this is irrelevant.
-
-{phang}
 {opt seed(integer)} option is necessary for the second stage of the analysis and ensures replicability. Users should be aware that Stata’s default pseudo-random number generator in Stata 14 is different than that of previous versions.
 
 {phang}
