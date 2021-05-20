@@ -408,33 +408,34 @@ qui{
 				local z=`z'+1				
 			}
 		}
-	} //END of model if
-	if (`bsrep'!=0){
-		sae_closefiles
-		mata: MSE = MSE:/(`bsrep')
-		
-		use `eb_est', replace
-		
-		foreach x of local _finvars{
-			qui:gen mse_`x' = .
-			local tostore `tostore' mse_`x'
+
+		if (`bsrep'!=0){
+			sae_closefiles
+			mata: MSE = MSE:/(`bsrep')
+			
+			use `eb_est', replace
+			
+			foreach x of local _finvars{
+				qui:gen mse_`x' = .
+				local tostore `tostore' mse_`x'
+			}
+			
+			qui:gen MC = `mcrep'
+			qui:gen BS = `bsrep'
+			qui:drop nSim
+			qui: order MC BS, first
+			
+			qui:mata: st_store(.,st_varindex(tokens("`tostore'")),MSE)
 		}
-		
-		qui:gen MC = `mcrep'
-		qui:gen BS = `bsrep'
-		qui:drop nSim
-		qui: order MC BS, first
-		
-		qui:mata: st_store(.,st_varindex(tokens("`tostore'")),MSE)
-	}
-	else{
-		use `eb_est', replace
-		qui:gen MC = `mcrep'
-		qui:gen BS = `bsrep'
-		qui:drop nSim
-		qui: order MC BS, first
-	}
-}
+		else{
+			use `eb_est', replace
+			qui:gen MC = `mcrep'
+			qui:gen BS = `bsrep'
+			qui:drop nSim
+			qui: order MC BS, first
+		}
+	} //END of model if
+}		
 end
 
 exit
