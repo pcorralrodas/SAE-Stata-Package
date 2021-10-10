@@ -1,0 +1,36 @@
+v 0.2.6
+d 'SAE': Stata module to provide commands and mata functions devoted to unit level small area estimation
+d 
+d Distribution-Date: 10/10/21
+d 
+d 
+F l/lsae_povmap.mata
+F l/lsae_povmap.mlib
+F p/povmap.ado
+F s/sae.ado
+F s/sae.sthlp
+F s/sae_closefiles.ado
+F s/sae_data.sthlp
+F s/sae_data_export.ado
+F s/sae_data_export.sthlp
+F s/sae_data_import.ado
+F s/sae_data_import.sthlp
+F s/sae_ebp.ado
+F s/sae_ebp.sthlp
+F s/sae_ebp_two.ado
+F s/sae_ebp_two.sthlp
+F s/sae_ell.sthlp
+F s/sae_mc_bs.ado
+F s/sae_mc_bs.sthlp
+F s/sae_model.sthlp
+F s/sae_model_lmm.sthlp
+F s/sae_proc.sthlp
+F s/sae_proc_inds.ado
+F s/sae_proc_inds.sthlp
+F s/sae_proc_stats.ado
+F s/sae_proc_stats.sthlp
+F s/sae_sim.sthlp
+F s/sae_sim_mcbs.ado
+F s/sae_sim_auto.ado
+F s/sae_sim_ebp.ado
+F s/sae_sim_lmm.sthlp
