@@ -30,7 +30,7 @@ F s/sae_proc_inds.sthlp
 F s/sae_proc_stats.ado
 F s/sae_proc_stats.sthlp
 F s/sae_sim.sthlp
-F s/sae_sim_mcbs.ado
+F s/sae_sim_mc_bs.ado
 F s/sae_sim_auto.ado
 F s/sae_sim_ebp.ado
 F s/sae_sim_lmm.sthlp
