@@ -230,6 +230,8 @@ set more off
 		mata: _varr        = .
 		mata: s2eps        = varE
 	}
+	
+	if ("`plines'"=="") local plines `plinevar'
 
 *===============================================================================
 // Run the MC sim in mata and keep results

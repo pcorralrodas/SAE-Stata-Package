@@ -270,7 +270,7 @@ qui{
 		mata: varUS = `sig2_2'
 		mata: varE = `evar'
 		
-	
+	if ("`plines'"=="") local plines `plinevar'
 	
 *===============================================================================
 // Run the MC sim in mata and keep results

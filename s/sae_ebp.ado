@@ -257,7 +257,7 @@ set more off
 		mata: varU = `uvar'
 		mata: varE = `evar'
 		
-	
+		if ("`plines'"=="") local plines `plinevar'
 *===============================================================================
 // Run the MC sim in mata and keep results
 *===============================================================================
