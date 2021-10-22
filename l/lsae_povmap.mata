@@ -3017,7 +3017,7 @@ void _s2sc_sim_molina(string scalar xvar,
 
 	if (npovlines>0 & nfgts>0 & plreal==0) {
 		plvalue = J(1,npovlines, NULL)
-		for (l=1; l<=npovlines; l++) plvalue[l] = &((_fgetcoldata(_fvarindex(pl[l], varname), fhcensus, p0, p1-p0), mask))		
+		for (l=1; l<=npovlines; l++) plvalue[l] = &(_fgetcoldata(_fvarindex(pl[l], varlist), fhcensus, p0, p1-p0)[selectindex(mask)])
 	}		
 	
 	
@@ -3426,7 +3426,7 @@ void _s2sc_sim_ebp(string scalar xvar,
 
 	if (npovlines>0 & nfgts>0 & plreal==0) {
 		plvalue = J(1,npovlines, NULL)
-		for (l=1; l<=npovlines; l++) plvalue[l] = &((_fgetcoldata(_fvarindex(pl[l], varname), fhcensus, p0, p1-p0), mask))		
+		for (l=1; l<=npovlines; l++) plvalue[l] = &(_fgetcoldata(_fvarindex(pl[l], varlist), fhcensus, p0, p1-p0)[selectindex(mask)])
 	}		
 	
 	
@@ -4038,7 +4038,7 @@ void _s2sc_sim_ebp2(string scalar xvar,
 
 	if (npovlines>0 & nfgts>0 & plreal==0) {
 		plvalue = J(1,npovlines, NULL)
-		for (l=1; l<=npovlines; l++) plvalue[l] = &((_fgetcoldata(_fvarindex(pl[l], varname), fhcensus, p0, p1-p0), mask))		
+		for (l=1; l<=npovlines; l++) plvalue[l] = &(_fgetcoldata(_fvarindex(pl[l], varlist), fhcensus, p0, p1-p0)[selectindex(mask)])
 	}		
 	
 	
