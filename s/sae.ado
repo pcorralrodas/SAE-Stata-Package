@@ -191,3 +191,6 @@ program sae, rclass
 	}
 	return add
 end
+
+findfile "lsae_povmap.mata"
+include "`r(fn)'"

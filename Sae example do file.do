@@ -91,7 +91,7 @@ We start off by creating a fake data set as illustrated in that same paper.
 	sample 20, by(HID)
 	
 	//Test H3 fit CensusEB
-	sae sim h3 Y x1 x2, area(HID) mcrep(50) bsrep(0) matin("$dpath\censo") ///
+	sae sim h3 Y x1 x2, area(HID) mcrep(50) bsrep(10) matin("$dpath\censo") ///
 	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny	
 	
 	
