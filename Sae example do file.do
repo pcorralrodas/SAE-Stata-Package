@@ -90,9 +90,12 @@ We start off by creating a fake data set as illustrated in that same paper.
 	sort hhid
 	sample 20, by(HID)
 	
+	///replace HID = 11111111 if HID==10101
+	
+	
 	//Test H3 fit CensusEB
 	sae sim h3 Y x1 x2, area(HID) mcrep(50) bsrep(10) matin("$dpath\censo") ///
-	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny	
+	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny	
 	
 	
 	

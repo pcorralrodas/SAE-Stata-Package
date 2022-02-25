@@ -291,7 +291,12 @@ set more off
 		mata _etamat = _invEB(elarea,Emat)[,2]
 		mata: _myxb = st_data(.,"_MyXb","__my_tOuse")
 		qui:gen double _NeWy = .
-		mata: _XB1=_addetaEB(_etamat,_my_info,_myxb)		
+		cap: mata: _XB1=_addetaEB(_etamat,_my_info,_myxb)		
+		if (_rc!=0){
+			dis as error "ERROR: All areas within the survey should be present within the census data"
+			error 459
+			exit
+		}
 		mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse",_XB1)	
 		qui:replace _NeWy = _NeWy + rnormal(0, __SiGma2) if __my_tOuse==1
 		local seed `c(rngstate)'
