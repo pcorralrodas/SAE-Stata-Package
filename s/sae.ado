@@ -190,7 +190,15 @@ program sae, rclass
 		`version' sae_cmd_`subcmd' `0'
 	}
 	return add
+	
+	cap mata: lsae_povmapStataVersion()	
+	if _rc{
+		findfile "lsae_povmap.mata"
+		run "`r(fn)'"
+	}
+		
+//findfile "lsae_povmap.mata"
+//qui:include "`r(fn)'"
 end
 
-findfile "lsae_povmap.mata"
-include "`r(fn)'"
+
