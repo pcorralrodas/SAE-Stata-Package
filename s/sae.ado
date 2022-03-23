@@ -197,8 +197,6 @@ program sae, rclass
 		run "`r(fn)'"
 	}
 		
-//findfile "lsae_povmap.mata"
-//qui:include "`r(fn)'"
 end
 
 

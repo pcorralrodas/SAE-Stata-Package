@@ -369,6 +369,10 @@ program define povmap, eclass byable(recall)
 	est store bOLS
 	if `hheffs'==1 {
 		//Alpha model
+		if ("`zvar'"==""){
+			local noZ __mz1_000
+			local anames: list anames - noZ
+		}
 		mat rownames _vzols = `anames'
 		mat colnames _vzols = `anames'
 		mat rownames _bzols = Residual

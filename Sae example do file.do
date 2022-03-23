@@ -79,11 +79,13 @@ We start off by creating a fake data set as illustrated in that same paper.
 	
 	gen pvar = `povline'
 	
+	gen uno =1
+	
 	tempfile censo
 	save `censo'
 	
 	preserve
-	sae data import, datain("`censo'") varlist(x1 x2 hhsize pvar) ///
+	sae data import, datain("`censo'") varlist(x1 x2 uno hhsize pvar) ///
 			area(HID) uniqid(hhid) dataout("$dpath\censo") 
 	restore
 	
@@ -94,7 +96,8 @@ We start off by creating a fake data set as illustrated in that same paper.
 	
 	
 	//Test H3 fit CensusEB
-	sae sim h3 Y x1 x2, area(HID) mcrep(50) bsrep(10) matin("$dpath\censo") ///
+//set trace on
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("$dpath\censo") ///
 	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny	
 	
 	
