@@ -192,7 +192,7 @@ program sae, rclass
 	return add
 	
 	cap mata: lsae_povmapStataVersion()	
-	if _rc{
+	if (_rc!=0){
 		findfile "lsae_povmap.mata"
 		run "`r(fn)'"
 	}

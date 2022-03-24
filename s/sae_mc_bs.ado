@@ -35,6 +35,7 @@ program define sae_mc_bs, eclass byable(recall)
 	lny
 	bcox
 	lnskew
+	s2s_spec
 	CONStant(real 0.0)
 	Zvar(varlist numeric fv) 
 	yhat(varlist numeric fv) 
@@ -63,6 +64,10 @@ set more off
 	foreach vs in varest{
 		local `vs' = lower("``vs''")
 	}
+	
+	//Special for S2S
+	if ("`s2s_spec'"=="") local s2s_spec = 0
+	else                  local s2s_spec = 1
 	
 	//join addvars and plinevar
 	if "`plinevar'"!="" & "`plines'"!=""{
@@ -288,14 +293,23 @@ set more off
 			mata: elarea = elarea[_my_info[.,1]]			
 		}
 		//Note that the location vectors are sorted
-		mata _etamat = _invEB(elarea,Emat)[,2]
-		mata: _myxb = st_data(.,"_MyXb","__my_tOuse")
-		qui:gen double _NeWy = .
-		cap: mata: _XB1=_addetaEB(_etamat,_my_info,_myxb)		
-		if (_rc!=0){
-			dis as error "ERROR: All areas within the survey should be present within the census data"
-			error 459
-			exit
+		if (`s2s_spec'==0){
+			mata _etamat = _invEB(elarea,Emat)[,2]
+			mata: _myxb = st_data(.,"_MyXb","__my_tOuse")
+			qui:gen double _NeWy = .
+			cap: mata: _XB1=_addetaEB(_etamat,_my_info,_myxb)		
+			if (_rc!=0){
+				dis as error "ERROR: All areas within the survey should be present within the census data"
+				error 459
+				exit
+			}
+		}
+		else{
+			//elarea is from the survey, Emat is from the census...
+			mata _etamat = _invEB(elarea,Emat)
+			mata: _myxb = st_data(.,"_MyXb","__my_tOuse")
+			qui:gen double _NeWy = .
+			cap: mata: _XB1=_elMoritz(_etamat,_my_info, elarea,_myxb, varU)					
 		}
 		mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse",_XB1)	
 		qui:replace _NeWy = _NeWy + rnormal(0, __SiGma2) if __my_tOuse==1

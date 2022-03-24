@@ -2821,12 +2821,35 @@ function _getuniq(string scalar areas){
 
 //Adds ETA to the simulations...
 function _addetaEB(etamat,info, xb){
-		for(j=1; j<=rows(info); j++) {
-			m2 = info[j,1],. \ info[j,2],.
-			xb[|m2|] = xb[|m2|] :+ etamat[j]		 
+	lainfo = rows(info)
+	for(j=1; j<=lainfo; j++) {
+		m2 = info[j,1],. \ info[j,2],.
+		xb[|m2|] = xb[|m2|] :+ etamat[j]		 
+	}
+	return(xb)
+}
+
+function _elMoritz(etamat, info, larea, xb, sigma2U){
+	lainfo  = rows(info)
+	elcenso = rows(etamat)
+	
+	for(j=1; j<=lainfo; j++){
+		k=0
+		i=1
+		while(((i<=elcenso) & k==0)){
+			if(larea[j]==etamat[i,1]){
+				k=1
+				m2 = info[j,1],. \ info[j,2],.
+				xb[|m2|] = xb[|m2|] :+ etamat[i,2]				
+			}
+			i = i+1
 		}
-		
-		return(xb)
+		if (k==0){
+			m2 = info[j,1],. \ info[j,2],.
+			xb[|m2|] = xb[|m2|] :+ rnormal(1,1,0,sqrt(sigma2U))
+		} 
+	}
+	return(xb)
 }
 
 //Function does inverse EB for Molina BS... locations is Sx1 mat with location 
@@ -2840,7 +2863,7 @@ function _invEB(real matrix locations, real matrix loceta){
 			if (k==0){
 				if (loceta[j,1]==locations[i]){
 					_toSvy = locations[i],loceta[j,2]
-					k=1
+					k = 1
 				}				
 			}
 			else{
