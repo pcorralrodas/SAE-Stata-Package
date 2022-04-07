@@ -4,7 +4,8 @@ clear all
 global dpath "C:\Users\\`c(username)'\OneDrive\WPS_2020\7.twofold\"
 
 
-
+run "C:\Users\WB378870\GitHub\SAE-Stata-Package\s\sae_mc_bs.ado"
+run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
 
 /*
 Do file below is a test for a two fold nested error model. It follows the method 
@@ -77,7 +78,7 @@ We start off by creating a fake data set as illustrated in that same paper.
 	gen hhid = _n
 	gen hhsize = 1
 	
-	gen pvar = `povline'
+	gen double pvar = `povline'
 	
 	gen uno =1
 	
@@ -92,27 +93,65 @@ We start off by creating a fake data set as illustrated in that same paper.
 	sort hhid
 	sample 20, by(HID)
 	
-	///replace HID = 11111111 if HID==10101
+	tempfile ladata
+	save `ladata'
 	
 	
-	//Test H3 fit CensusEB
-//set trace on
+	/*
+	use `ladata', clear
+	
 	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("$dpath\censo") ///
-	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny	
+	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny
+	
+	rename avg_fgt0 avg_fgt0_pvar
+	rename mse_avg_fgt0 mse_avg_fgt0_pvar
+	
+	sum mse* 
+	save "$dpath\tes1t.dta", replace
+	
+	use `ladata', clear
+	
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("$dpath\censo") ///
+	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny	s2s_spec
+	
+	rename avg_fgt0 avg_fgt0_pvar
+	rename mse_avg_fgt0 mse_avg_fgt0_pvar
+	
+	sum mse* 
+	
+	cf _all using "$dpath\tes1t.dta", verb
 	
 	
+	use `ladata', clear
+	
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("$dpath\censo") ///
+	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny	s2s_spec
+	
+
+	
+	sum mse* 
+	
+	cf _all using "$dpath\tes1t.dta", verb
+	*/
+	
+	use `ladata', clear
+	
+	sae sim reml Y x1 x2, area(HID) mcrep(50) bsrep(10) matin("$dpath\censo") ///
+	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny appendsvy
 	
 	
-	ssss
-	preserve
+	sss
 	
+
+	use `ladata', clear
 	
 	sae sim reml2 Y x1 x2, area(2) subarea(HID) mcrep(50) bsrep(10) matin("$dpath\censo") ///
-	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) pline(`povline') lny
+	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny
 	
-	tempfile erste
-	save `erste'
+
 	
+	
+	sss
 	restore
 	
 	sae sim reml2 Y x1 x2, area(2) subarea(HID) mcrep(50) bsrep(10) matin("$dpath\censo") ///
