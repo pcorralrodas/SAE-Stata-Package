@@ -1,10 +1,6 @@
 set more off
 clear all
 
-global dpath "C:\Users\\`c(username)'\OneDrive\WPS_2020\7.twofold\"
-
-
-
 
 /*
 Do file below is a test for a two fold nested error model. It follows the method 
@@ -85,8 +81,9 @@ We start off by creating a fake data set as illustrated in that same paper.
 	save `censo'
 	
 	preserve
+	tempfile census_mata
 	sae data import, datain("`censo'") varlist(x1 x2 uno hhsize pvar) ///
-			area(HID) uniqid(hhid) dataout("$dpath\censo") 
+			area(HID) uniqid(hhid) dataout("`census_mata'") 
 	restore
 	
 	sort hhid
@@ -97,7 +94,7 @@ We start off by creating a fake data set as illustrated in that same paper.
 	
 	//Test H3 fit CensusEB
 //set trace on
-	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("$dpath\censo") ///
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("`census_mata'") ///
 	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny	
 	
 	
