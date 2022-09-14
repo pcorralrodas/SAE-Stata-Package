@@ -101,13 +101,6 @@ set more off
 	
 	local indicators = upper("`indicators'")
 	
-	//For the YDUMP
-	local yhatlist
-	forval z=1 / `rep' {
-		local yhatlist `yhatlist' _YHAT`z'
-	}
-
-	
 	
 	marksample touse23
 	
@@ -244,6 +237,14 @@ set more off
 	}
 	
 	if ("`plines'"=="") local plines `plinevar'
+	
+	//For the YDUMP
+	local yhatlist
+	forval z=1 / `rep' {
+		local yhatlist `yhatlist' _YHAT`z'
+	}
+
+	
 
 *===============================================================================
 // Run the MC sim in mata and keep results
