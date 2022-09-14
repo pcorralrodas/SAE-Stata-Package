@@ -101,6 +101,13 @@ set more off
 	
 	local indicators = upper("`indicators'")
 	
+	//For the YDUMP
+	local yhatlist
+	forval z=1 / `rep' {
+		local yhatlist `yhatlist' _YHAT`z'
+	}
+
+	
 	
 	marksample touse23
 	
