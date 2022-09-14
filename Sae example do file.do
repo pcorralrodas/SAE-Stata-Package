@@ -97,11 +97,22 @@ We start off by creating a fake data set as illustrated in that same paper.
 	save `ladata'
 	
 	
-	/*
+	
 	use `ladata', clear
 	
-	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("$dpath\censo") ///
-	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny
+	tempfile test
+	
+	set trace on
+	
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(0) matin("$dpath\censo") ///
+	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny ydump(`test')
+	
+	sae data export, matasource(`test')
+	
+	
+	
+	sss
+	
 	
 	rename avg_fgt0 avg_fgt0_pvar
 	rename mse_avg_fgt0 mse_avg_fgt0_pvar
