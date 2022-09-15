@@ -3244,6 +3244,11 @@ void _s2sc_sim_molina(string scalar xvar,
 		if (mod(s,50)==0) printf(" %5.0f\n",s)
 		displayflush()
 	} //end of s
+	if (st_local("ydump")!=""){
+		if (st_local("plinevar")!="") fputmatrix(yd,*plvalue[1])
+		fclose(yd)
+	}	
+	
 	xb1=xb = area_v = wt_v = wt_m = pl_v = NULL
 	block0 = y = wt0 = wt = area = wy = running = wt_p = rgap = plvalue = lny = wlny = info = areaid = nhh = NULL
 	
@@ -3274,7 +3279,6 @@ void _s2sc_sim_molina(string scalar xvar,
 	st_store(.,.,outsim)
 	outsim = NULL
 	
-	if (st_local("ydump")!="") fclose(yd)
 	st_local("_itran","0")
 }
 //Does the new simulation for efficient MSE estimation
