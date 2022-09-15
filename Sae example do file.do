@@ -81,6 +81,14 @@ We start off by creating a fake data set as illustrated in that same paper.
 	gen double pvar = `povline'
 	
 	gen uno =1
+	preserve
+		sort hhid
+		sample 20, by(HID)
+		
+		tempfile ladata
+		save `ladata'
+	restore
+	drop if HID==`=HID[1]'
 	
 	tempfile censo
 	save `censo'
@@ -88,30 +96,20 @@ We start off by creating a fake data set as illustrated in that same paper.
 	preserve
 	sae data import, datain("`censo'") varlist(x1 x2 uno hhsize pvar) ///
 			area(HID) uniqid(hhid) dataout("$dpath\censo") 
-	restore
-	
-	sort hhid
-	sample 20, by(HID)
-	
-	tempfile ladata
-	save `ladata'
-	
-	
+	restore	
 	
 	use `ladata', clear
 	
 	tempfile test
 	
-	set trace on
-	
-	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(0) matin("$dpath\censo") ///
-	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny ydump(`test')
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(1) matin("$dpath\censo") ///
+	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny ydump(`test') s2s_spec
 	
 	sae data export, matasource(`test')
 	
 	
 	
-	sss
+	ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
 	
 	
 	rename avg_fgt0 avg_fgt0_pvar
