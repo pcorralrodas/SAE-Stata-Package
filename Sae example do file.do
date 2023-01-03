@@ -91,7 +91,11 @@ We start off by creating a fake data set as illustrated in that same paper.
 	
 	///replace HID = 11111111 if HID==10101
 	
+	sae sim ell Y x1 x2, area(HID) yhat(uno) rep(50) matin("`census_mata'") ///
+	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny	///
+	eta(nonnormal) epsilon(nonnormal)
 	
+	ss
 	//Test H3 fit CensusEB
 //set trace on
 	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("`census_mata'") ///

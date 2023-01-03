@@ -1,19 +1,19 @@
 {smcl}
 {* *! version 1.0.0  17Dec2020}{...}
-{cmd:help sae_ebp_twofold}
+{cmd:help sae_ebp_two}
 {hline}
 
 {title:Title}
 
 {p2colset 5 24 26 2}{...}
-{p2col :{cmd:sae_ebp} {hline 1}} Restricted max. likelihood fitted model with Marhuenda et al. (2017) twofold nested error with EB estimation and Bootstrap MSE. {p_end}
+{p2col :{cmd:sae model/sim reml2} {hline 1}} Restricted max. likelihood fitted model with Marhuenda et al. (2017) twofold nested error with EB estimation and Bootstrap MSE. {p_end}
 {p2colreset}{...}
 
 {title:Syntax}
 
 {p 8 23 2}
 {opt sae model reml2} {varlist} {ifin} {cmd:,}
-{opt area(varname)}
+{opt area(numlist max=1) subarea(varname numeric)}
 
 {p 8 23 2}
 {opt sae sim reml2} {varlist} {ifin} {cmd:,}
@@ -41,7 +41,7 @@
 {title:Description}
 
 {pstd}
-{cmd:sae model/sim reml} Supports Molina and Rao's (2010) EB small area estimation methods. Translated from R's sae library from Molina and Marhuenda. 
+{cmd:sae model/sim reml2} Supports Marhuenda et al. (2017) EB small area estimation methods with twofold nested errors.  
 
 {title:Options}
 
@@ -114,22 +114,19 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 {phang}
 {opt PLINEs(numlist sort)} option allows users to explicitly indicate the threshold to be used, this option is preferred when the threshold is constant across all observations. Additionally, it is possible to specify multiple lines, separated by a space.
 
-{phang}
-{opt appendsvy} Option allows for full implementation of Molina and Rao's EB predictor, and ensures EB estimates utilize sampled observations and non-sampled observations. If option is not specified it will implement Census EB, see Corral, Molina, Nguyen (2020).
 
 {title:Example}
-sae sim reml Y x1 x2 x3 x4 x5 x6,  area(area)  ///
+sae sim reml2 Y x1 x2 x3 x4 x5 x6,  area(area)  ///
 mcrep(200) bsrep(200) matin("census") lny seed(31916) ///
 pwcensus(hhsize) indicators(FGT0 FGT1 FGT2) aggids(0) uniq(hhid_n) plines(16.2)
 
 
-{title:Author:}
-
-{pstd}
-Paul Corral{break}
-The World Bank - Poverty and Equity Global Practice {break}
-Washington, DC{break}
-pcorralrodas@worldbank.org{p_end}
+{title:Authors}	
+	{p 4 4 2}Minh Cong Nguyen, mnguyen3@worldbank.org{p_end}
+	{p 4 4 2}Paul Andres Corral Rodas, pcorralrodas@worldbank.org{p_end}
+	{p 4 4 2}Joao Pedro Azevedo, jazevedo@worldbank.org{p_end}
+	{p 4 4 2}Qinghua Zhao, qzhao@worldbank.org{p_end}
+	{p 4 4 2}World Bank{p_end}
 
 
 {title:References}

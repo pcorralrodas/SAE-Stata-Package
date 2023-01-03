@@ -96,9 +96,10 @@ Resources/342674-1092157888460/Zhao_ManualPovMap.pdf .{p_end}
 
 {title:Authors}	
 	{p 4 4 2}Minh Cong Nguyen, mnguyen3@worldbank.org{p_end}
-	{p 4 4 2}Paul Corral, pcorralrodas@worldbank.org{p_end}
+	{p 4 4 2}Paul Andres Corral Rodas, pcorralrodas@worldbank.org{p_end}
 	{p 4 4 2}Joao Pedro Azevedo, jazevedo@worldbank.org{p_end}
 	{p 4 4 2}Qinghua Zhao, qzhao@worldbank.org{p_end}
+	{p 4 4 2}World Bank{p_end}
 	
 
 {title:Thanks for citing {cmd: sae} as follows}

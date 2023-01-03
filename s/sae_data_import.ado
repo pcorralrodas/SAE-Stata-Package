@@ -1,8 +1,9 @@
-*! sae_data_import.ado version 0.3.0  July 3, 2020
+*! version 0.3.0  July 3, 2020
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 *! Paul Andres Corral Rodas - pcorralrodas@worldbank.org
 *! Joao Pedro Azevedo - jazevedo@worldbank.org
 *! Qinghua Zhao  
+
 cap program drop sae_data_import
 program define sae_data_import	
 	syntax, [if] [in] varlist(string) area(string) UNIQid(string) datain(string) dataout(string) 

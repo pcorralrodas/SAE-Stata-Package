@@ -29,12 +29,17 @@ The {cmd:sae} suite of commands are made for small area estimation. To become fa
 	2. CensusEB estimation under REML using                     
 	   two-fold nested error models see: 
 {col 7}{...}
-     {bf:{help sae_ebp_two:[SAE] sae reml2}}  
+     {bf:{help sae_ebp2:[SAE] sae reml2}}  
 	3. CensusEB estimation under GLS model allowing 
 	   for survey weights and heteroskedasticity with
 	   one-fold nested error models see:
 {col 7}{...}
-	   {bf:{help sae_mc_bs:[SAE] sae h3}}  
+	   {bf:{help sae_mc_bs:[SAE] sae h3}} 
+	4. ELL estimation under GLS model allowing 
+	   for survey weights and heteroskedasticity with
+	   one-fold nested error models see:
+{col 7}{...}
+	   {bf:{help sae_ell:[SAE] sae ell}}  
 	   
 {p 4 4 2}
 To perform data related functions such as to import the target dataset to a more manageable
@@ -85,9 +90,10 @@ Resources/342674-1092157888460/Zhao_ManualPovMap.pdf .{p_end}
 
 {title:Authors}	
 	{p 4 4 2}Minh Cong Nguyen, mnguyen3@worldbank.org{p_end}
-	{p 4 4 2}Paul Corral, pcorralrodas@worldbank.org{p_end}
+	{p 4 4 2}Paul Andres Corral Rodas, pcorralrodas@worldbank.org{p_end}
 	{p 4 4 2}Joao Pedro Azevedo, jazevedo@worldbank.org{p_end}
 	{p 4 4 2}Qinghua Zhao, qzhao@worldbank.org{p_end}
+	{p 4 4 2}World Bank{p_end}
 	
 
 {title:Thanks for citing {cmd: sae} as follows}
