@@ -3266,9 +3266,21 @@ void _s2sc_sim_molina(string scalar xvar,
 		displayflush()
 	} //end of s
 	if (st_local("ydump")!=""){
-		if (st_local("plinevar")!="") fputmatrix(yd,*plvalue[1])
+		if (st_local("addvars")!=""){
+			if (st_local("plinevar")!=""){
+				fputmatrix(yd,*plvalue[1])	
+				addvarlist = tokens(st_local("addvars"))
+				if (cols(addvarlist)>1) for (v=2; v<=cols(addvarlist); v++) fputmatrix(yd, select(_fgetcoldata(_fvarindex(addvarlist[v], varlist), fhcensus, p0, p1-p0), mask)) //_ID
+			}
+			else{
+				addvarlist = tokens(st_local("addvars"))
+				addvarlist
+				for (v=1; v<=cols(addvarlist); v++) fputmatrix(yd, select(_fgetcoldata(_fvarindex(addvarlist[v], varlist), fhcensus, p0, p1-p0), mask)) //_ID
+			}
+		} 
 		fclose(yd)
 	}
+	
 	
 	xb1=xb = area_v = wt_v = wt_m = pl_v = NULL
 	block0 = y = wt0 = wt = area = wy = running = wt_p = rgap = plvalue = lny = wlny = info = areaid = nhh = NULL

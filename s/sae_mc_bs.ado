@@ -75,7 +75,7 @@ set more off
 		error 198
 	}
 	local plinevar: list uniq plinevar
-	local addvars : list addvars | plinevar
+	local addvars : list plinevar | addvars
 	local addvars : list uniq addvars
 	if ("`plinevar'"!="" & "`allmata'"=="") {
 		if `: list sizeof plinevar' > 1 {
