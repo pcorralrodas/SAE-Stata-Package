@@ -25,6 +25,7 @@
 {opt lny}
 {opt bcox}
 {opt lnskew}
+{opt s2s_spec}
 {opt CONStant(real 0.0)}
 {opt Zvar(varlist numeric fv)} 
 {opt yhat(varlist numeric fv)} 
@@ -91,6 +92,9 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 
 {phang}
 {opt lnskew} Option tells command to execute lnskew0 (log shift transform - Zero skewness) on the dependent variable of your model.
+
+{phang}
+{opt s2s_spec} option indicates that the survey is not a subset of the census and allows for cases where an area used for the model is not present in the census.
 
 {phang}
 {opt seed(integer)} option is necessary for the second stage of the analysis and ensures replicability. Users should be aware that Stata’s default pseudo-random number generator in Stata 14 is different than that of previous versions.
