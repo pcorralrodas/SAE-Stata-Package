@@ -2896,8 +2896,7 @@ void _s2sc_sim_molina(string scalar xvar,
 					 real matrix sigma_eps,
 					 real scalar varU)
 {
-
-
+	
 	sim         = strtoreal(st_local("rep"))
 	seed        = strtoreal(st_local("seed"))	
 	hheff       = strtoreal(st_local("hheffs"))
@@ -3267,8 +3266,8 @@ void _s2sc_sim_molina(string scalar xvar,
 		if (mod(s,50)==0) printf(" %5.0f\n",s)
 		displayflush()
 	} //end of s
+	
 	if (st_local("ydump")!=""){
-
 		if (st_local("addvars")!=""){
 			if (st_local("plinevar")!=""){
 				fputmatrix(yd,*plvalue[1])	
@@ -3287,13 +3286,6 @@ void _s2sc_sim_molina(string scalar xvar,
 	xb1=xb = area_v = wt_v = wt_m = pl_v = NULL
 	block0 = y = wt0 = wt = area = wy = running = wt_p = rgap = plvalue = lny = wlny = info = areaid = nhh = NULL
 	
-	//Add additional variables to the ydump
-	if (st_local("ydump")!="") {
-		if (st_local("addvars")!="") {
-			addvarlist = tokens(st_local("addvars"))
-			for (v=1; v<=coladd; v++) fputmatrix(yd, select(_fgetcoldata(_fvarindex(addvarlist[v], varlist), fhcensus, p0, p1-p0), mask)) //_ID
-		}		
-	}
 	
 	//export results to Stata
 	block = block[2..rows(block),.]
