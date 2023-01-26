@@ -1,11 +1,13 @@
 set more off
 clear all
 
+
 global dpath "C:\Users\\`c(username)'\OneDrive\WPS_2020\7.twofold\"
 
 
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\s\sae_mc_bs.ado"
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
+
 
 /*
 Do file below is a test for a two fold nested error model. It follows the method 
@@ -94,6 +96,7 @@ We start off by creating a fake data set as illustrated in that same paper.
 	save `censo'
 	
 	preserve
+	tempfile census_mata
 	sae data import, datain("`censo'") varlist(x1 x2 uno hhsize pvar) ///
 			area(HID) uniqid(hhid) dataout("$dpath\censo") 
 	restore	
@@ -104,11 +107,18 @@ We start off by creating a fake data set as illustrated in that same paper.
 	
 	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(1) matin("$dpath\censo") ///
 	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny ydump(`test') s2s_spec
+
+			area(HID) uniqid(hhid) dataout("`census_mata'") 
+
 	
 	sae data export, matasource(`test')
 	
 	
+	sae sim ell Y x1 x2, area(HID) yhat(uno) rep(50) matin("`census_mata'") ///
+	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny	///
+	eta(nonnormal) epsilon(nonnormal)
 	
+
 	ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
 	
 	
@@ -122,6 +132,13 @@ We start off by creating a fake data set as illustrated in that same paper.
 	
 	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("$dpath\censo") ///
 	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny	s2s_spec
+
+	ss
+	//Test H3 fit CensusEB
+//set trace on
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(10) matin("`census_mata'") ///
+	ind(FGT0 FGT1) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`povline') lny	
+
 	
 	rename avg_fgt0 avg_fgt0_pvar
 	rename mse_avg_fgt0 mse_avg_fgt0_pvar

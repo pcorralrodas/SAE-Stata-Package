@@ -1,58 +1,50 @@
 {smcl}
-{* *! version 1.0.0  11feb2020}{...}
-{viewerdialog sae "dialog sae"}{...}
-{vieweralsosee "[SAE] intro" "mansection SAE intro"}{...}
-{vieweralsosee "" "--"}{...}
-{vieweralsosee "[SAE] Glossary" "help sae_glossary"}{...}
-{vieweralsosee "[SAE] intro substantive" "help sae_intro_substantive"}{...}
-{vieweralsosee "[SAE] styles" "help sae_styles"}{...}
-{vieweralsosee "[SAE] workflow" "help sae_workflow"}{...}
-{viewerjumpto "Description" "sae##description"}{...}
-{viewerjumpto "Remarks" "sae##remarks"}{...}
-{viewerjumpto "Acknowledgments" "sae##ack"}{...}
+{* *! version 2.5.0  12Dec2022}{...}
 {title:Title}
 
 {hline}
-help for {cmd:sae} {right:World Bank/Poverty and Equity GP - GSG1}
+help for {cmd:sae} {right:Nguyen, Corral, Azevedo, and Zhao}
 {hline}
 
-{p2colset 5 19 21 2}{...}
-{p2col :{manlink SAE intro} {hline 2}}Introduction to sae - small area estimation packages{p_end}
+{p2colset 9 24 22 2}{...}
+{p2col :{cmd:sae} {hline 1} Package for small area estimation of poverty indicators developed by World Bank Staff.}{p_end}
 {p2colreset}{...}
 
 {p 8 9 9}
 {it:[Suggestion:  Read}
-{bf:{help sae_intro_substantive:[SAE] intro substantive}}
+{browse "https://openknowledge.worldbank.org/handle/10986/37728":Guidelines to small area estimation for poverty mapping.}
 {it:first.]}
 
 
 {marker description}{...}
 {title:Description}
 
-    {c TLC}{hline 62}{c TRC}
-    {c |} The {cmd:sae} suite of commands deals with small area estimation,{col 68}{c |}
-    {c |} abbreviated as {cmd:sae} data. To become familiar with {cmd:sae}{col 68}{c |}
-    {c |} as quickly as possible, do the following{col 68}{c |}
-    {c |}{col 68}{c |}
-    {c |}    1.  See {it:{help sae##example:A simple example}} under {...}
-{bf:{help sae##remarks:Remarks}} below.{col 68}{c |}
-    {c |}{col 68}{c |}
-    {c |}    2.  If you have data that require simulating, see{col 68}{c |}
-    {c |}        {bf:{help sae_data:[SAE] sae data}}{col 68}{c |}
-    {c |}        {bf:{help sae_sim:[SAE] sae simulate}}{col 68}{c |}
-    {c |}{col 68}{c |}
-    {c |}    3.  Alternatively, if you have already simulated data, see{col 68}{c |}
-    {c |}        {bf:{help sae_proc:[SAE] sae proc}}{col 68}{c |}
-    {c |}{col 68}{c |}
-    {c |}    4.  To fit your model, see{col 68}{c |}
-    {c |}        {bf:{help sae_model:[SAE] sae model}}{col 68}{c |}
-    {c BLC}{hline 62}{c BRC}
-
-
+{p 4 4 2}
+The {cmd:sae} suite of commands are made for small area estimation. To become familiar with the {cmd:sae} suite of commands see:       
+	                                                                  
+	1. EB and CensusEB estimation under REML                       
+	   using one-fold nested error models see: 
+{col 7}{...}
+     {bf:{help sae_ebp:[SAE] sae reml}}  
+	2. CensusEB estimation under REML using                     
+	   two-fold nested error models see: 
+{col 7}{...}
+     {bf:{help sae_ebp2:[SAE] sae reml2}}  
+	3. CensusEB estimation under GLS model allowing 
+	   for survey weights and heteroskedasticity with
+	   one-fold nested error models see:
+{col 7}{...}
+	   {bf:{help sae_mc_bs:[SAE] sae h3}} 
+	4. ELL estimation under GLS model allowing 
+	   for survey weights and heteroskedasticity with
+	   one-fold nested error models see:
+{col 7}{...}
+	   {bf:{help sae_ell:[SAE] sae ell}}  
+	   
 {p 4 4 2}
 To perform data related functions such as to import the target dataset to a more manageable
 format for the simulations; to export the resulting simulations to a dataset of the
-user’s preference; and to compare the variables between the sources of data.
+user’s preference see:
 
 {col 7}{...}
 {hline 70}
@@ -68,66 +60,14 @@ user’s preference; and to compare the variables between the sources of data.
 {hline 70}
 {p 6 6 2}
 
-{p 4 4 2}
-To perform first stage estimation on {cmd:sae} data. This routine is for obtaining the GLS estimates of the first stage. The
-sub-routines, {bf:{help sae_model_lmm:sae model lmm}} (linear mixed model) and {bf:{help sae_model_povmap:sae model povmap}} (povmap) are used interchangeably
-
-{col 7}{...}
-{hline 70}
-{col 7}{bf:{help sae_model_lmm:sae model lmm}}{...}
-{col 30}model first stage estimations for the linear mixed models
-{...}
-{...}
-{...}
-{col 7}{...}
-{hline 70}
-
-{p 4 4 2}
-To perform second stage estimation on {cmd:sae} data. This routine and sub-routine obtains the GLS estimates of the first
-stage, and goes on to perform the Monte Carlo simulations
-
-{col 7}{...}
-{hline 70}
-{col 7}{bf:{help sae_simulate_lmm:sae sim lmm}}{...}
-{col 30}simulate based on first stage models for the linear mixed models
-{...}
-{...}
-{...}
-{col 7}{...}
-{hline 70}
-
-{p 4 4 2}
-The stats and inds sub-routines are useful for processing Mata formatted
-simulation output and producing indicators with new thresholds or weights, as well as profiling.
-
-{col 7}{...}
-{hline 70}
-{col 7}{bf:{help sae_proc_stats:sae proc stats}}{...}
-{col 30}produce the statistics based on simulated data
-{...}
-{...}
-{col 7}{bf:{help sae_proc_ind:sae proc ind}}{...}
-{col 30}prodiuce Poverty and Inequality indictors based on simulated data
-{...}
-{...}
-{...}
-{col 7}{...}
-{hline 70}
-
-{marker remarks}{...}
-{title:Remarks}
-
-{p 4 4 2}
-Remarks are presented under the following headings:
-
-	{help sae##example:A simple example}
-	{help sae##order:Suggested reading order}
 
 {marker references}{...}
 {title:References}
 
 {p 4 4 2}Corral, P., Molina, I., Nguyen, M. (2020). Pull your small area estimates up by your bootstraps, World Bank Policy Research Working Paper 9256.{p_end}
 
+{p 4 4 2}Corral, Paul; Molina, Isabel; Cojocaru, Alexandru; Segovia, Sandra. (2022). Guidelines to Small Area Estimation for Poverty Mapping. © Washington, DC : World Bank.{p_end}
+ 
 {p 4 4 2}Elbers, C., J. O. Lanjouw, and P. Lanjouw (2002). Micro-level estimation of welfare. 2911.{p_end}
 
 {p 4 4 2}Elbers, C., J. O. Lanjouw, and P. Lanjouw (2003). Micro–level estimation of poverty and inequality. Econometrica
@@ -150,9 +90,10 @@ Resources/342674-1092157888460/Zhao_ManualPovMap.pdf .{p_end}
 
 {title:Authors}	
 	{p 4 4 2}Minh Cong Nguyen, mnguyen3@worldbank.org{p_end}
-	{p 4 4 2}Paul Corral, pcorralrodas@worldbank.org{p_end}
+	{p 4 4 2}Paul Andres Corral Rodas, pcorralrodas@worldbank.org{p_end}
 	{p 4 4 2}Joao Pedro Azevedo, jazevedo@worldbank.org{p_end}
 	{p 4 4 2}Qinghua Zhao, qzhao@worldbank.org{p_end}
+	{p 4 4 2}World Bank{p_end}
 	
 
 {title:Thanks for citing {cmd: sae} as follows}

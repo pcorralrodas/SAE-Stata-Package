@@ -124,19 +124,12 @@ sae sim elleb Y x1 x2 x3 x4 x5 x6,  area(area)  ///
 mcrep(200) bsrep(200) matin("census") lny seed(31916) ///
 pwcensus(hhsize) indicators(FGT0 FGT1 FGT2) aggids(0) uniq(hhid_n) plines(16.2)
 
-{title:Authors:}
-
-{pstd}
-Paul Corral{break}
-The World Bank - Poverty and Equity Global Practice {break}
-Washington, DC{break}
-pcorralrodas@worldbank.org{p_end}
-
-{pstd}
-Minh Cong Nguyen{break}
-The World Bank - Poverty and Equity Global Practice {break}
-Washington, DC{break}
-mnguyen3@worldbank.org{p_end}
+{title:Authors}	
+	{p 4 4 2}Minh Cong Nguyen, mnguyen3@worldbank.org{p_end}
+	{p 4 4 2}Paul Andres Corral Rodas, pcorralrodas@worldbank.org{p_end}
+	{p 4 4 2}Joao Pedro Azevedo, jazevedo@worldbank.org{p_end}
+	{p 4 4 2}Qinghua Zhao, qzhao@worldbank.org{p_end}
+	{p 4 4 2}World Bank{p_end}
 
 
 {title:References}

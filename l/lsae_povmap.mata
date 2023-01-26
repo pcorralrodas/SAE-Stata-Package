@@ -2960,6 +2960,8 @@ void _s2sc_sim_molina(string scalar xvar,
 	colsyh  = cols(yh)
 	colsyh2 = cols(yh2)
 	
+	coladd = (st_local("addvars")!="" ? cols(tokens(st_local("addvars"))) : 0) 
+	
 	//Check if X and other variables (varinmodel local), Z and Yhats are in the code
 	e3499 = _fvarscheck(varinmod, varlist)
 	if (z1[1]  != "__mz1_000")  e3499 = _fvarscheck(z1, varlist)
@@ -3266,6 +3268,7 @@ void _s2sc_sim_molina(string scalar xvar,
 		displayflush()
 	} //end of s
 	if (st_local("ydump")!=""){
+
 		if (st_local("addvars")!=""){
 			if (st_local("plinevar")!=""){
 				fputmatrix(yd,*plvalue[1])	
@@ -3281,9 +3284,16 @@ void _s2sc_sim_molina(string scalar xvar,
 		fclose(yd)
 	}
 	
-	
 	xb1=xb = area_v = wt_v = wt_m = pl_v = NULL
 	block0 = y = wt0 = wt = area = wy = running = wt_p = rgap = plvalue = lny = wlny = info = areaid = nhh = NULL
+	
+	//Add additional variables to the ydump
+	if (st_local("ydump")!="") {
+		if (st_local("addvars")!="") {
+			addvarlist = tokens(st_local("addvars"))
+			for (v=1; v<=coladd; v++) fputmatrix(yd, select(_fgetcoldata(_fvarindex(addvarlist[v], varlist), fhcensus, p0, p1-p0), mask)) //_ID
+		}		
+	}
 	
 	//export results to Stata
 	block = block[2..rows(block),.]
@@ -3303,7 +3313,6 @@ void _s2sc_sim_molina(string scalar xvar,
 	st_addobs(rows(outsim))
 	st_store(.,.,outsim)
 	outsim = NULL
-	
 
 	st_local("_itran","0")
 }

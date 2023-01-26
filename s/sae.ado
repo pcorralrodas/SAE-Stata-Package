@@ -25,6 +25,12 @@ program sae, rclass
 	gettoken subcmd 0 : 0, parse(" :,=[]()+-")
 	local l = strlen("`subcmd'")
 	
+	cap findfile  "lsae_povmap.mata"
+	if _rc{
+		findfile "lsae_povmap.mata"
+		run "`r(fn)'"
+	}
+	
 	if ("`subcmd'"=="data") { //data relelated tasks
 		gettoken subcmd1 0 : 0, parse(" :,=[]()+-")
 		if ("`subcmd1'"=="import") { //import dta to mata file			
