@@ -1895,6 +1895,7 @@ void _s2sc_inds(string scalar ydump, string scalar plines, string scalar aggids,
 	agglist = strtoreal(tokens(aggids))	
 	fgtlist = tokens(st_local("fgtlist"))
 	gelist  = tokens(st_local("gelist"))
+	glist   = tokens(st_local("glist"))
 	pl      = strtoreal(tokens(plines))
 	plreal = 1
 	if (missing(pl)>0) {
@@ -1947,6 +1948,11 @@ void _s2sc_inds(string scalar ydump, string scalar plines, string scalar aggids,
 			senames = senames, "se_" + gelist[ind]
 		}
 	}
+	ngini = cols(glist)
+	if (ngini>0) {
+		rmatnames = rmatnames, "avg_gini"
+		senames = senames, "se_gini"
+	}
 	rmatnames = rmatnames, senames
 
 	if (npovlines>0 & nfgts>0 & plreal==0) {
@@ -1954,7 +1960,7 @@ void _s2sc_inds(string scalar ydump, string scalar plines, string scalar aggids,
 		for (l=1; l<=npovlines; l++) plvalue[l] = &(_fgetcoldata(_fvarindex(pl[l], varname), in, p0, p1-p0))		
 	}
 	fseek(in, p2, -1)
-	block = J(1, 5 + nfgts*npovlines + nges,.)
+	block = J(1, 5 + nfgts*npovlines + nges + ngini,.)
 	printf("{txt}\nComputing indicators for {res}%g{txt} simulation(s).\n", size[4])
 	display("{txt}{hline 4}{c +}{hline 3} 1 " +
 		"{hline 3}{c +}{hline 3} 2 " + "{hline 3}{c +}{hline 3} 3 " +
@@ -2048,6 +2054,24 @@ void _s2sc_inds(string scalar ydump, string scalar plines, string scalar aggids,
 				A = fgtx = current = NULL	
 			} //ind
 		} //nges
+		
+		//_fGini(x, w)
+		if (ngini>0) {
+			fgtx = J(1,1,.)
+			for (j=1; j<=nagg; j++) {							
+				if (nrow[j] >=2) {					
+					//each info panel
+					for (v=1; v<=nrow[j]; v++) {
+						l0 = (*info[j])[v,1],1 \ (*info[j])[v,2],1
+						fgtx = fgtx \ _fGini(y[|l0|] , wt[|l0|])
+					}					
+				}
+				else fgtx = fgtx \ _fGini(y,wt)
+			}			
+			block0 = block0, fgtx[2..rows(fgtx),1]			
+			fgtx = NULL
+		} //ngini
+		
 		//add blocks
 		block = block \ block0
 		printf(".")
