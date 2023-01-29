@@ -2945,6 +2945,7 @@ void _s2sc_sim_molina(string scalar xvar,
 	agglist = strtoreal(tokens(st_local("aggids")))
 	fgtlist = tokens(st_local("fgtlist"))
 	gelist  = tokens(st_local("gelist"))
+	glist   = tokens(st_local("glist"))
 	pl      = strtoreal(tokens(plvar))
 	plreal = 1
 	if (missing(pl)>0) {
@@ -3061,6 +3062,11 @@ void _s2sc_sim_molina(string scalar xvar,
 			senames = senames, "se_" + gelist[ind]
 		}
 	}
+	ngini = cols(glist)
+	if (ngini>0) {
+		rmatnames = rmatnames, "avg_gini"
+		senames = senames, "se_gini"		
+	}
 	rmatnames = rmatnames, senames
 
 	if (npovlines>0 & nfgts>0 & plreal==0) {
@@ -3097,12 +3103,9 @@ void _s2sc_sim_molina(string scalar xvar,
 		cens_area = area_v[info[.,1],1]
 	}
  
-	
-	
-		block = J(1, 5 + nfgts*npovlines + nges,.)
+		block = J(1, 5 + nfgts*npovlines + nges + ngini,.)
 		sim0 = 1
 
-	
 	for (s=1; s<=sim; s=s+count) {
 			
 			if (doone==1){
@@ -3280,12 +3283,29 @@ void _s2sc_sim_molina(string scalar xvar,
 					A = fgtx = current = NULL	
 				} //ind
 			} //nges
+			
+			//_fGini(x, w)
+			if (ngini>0) {
+				fgtx = J(1,1,.)
+				for (j=1; j<=nagg; j++) {							
+					if (nrow[j] >=2) {					
+						//each info panel
+						for (v=1; v<=nrow[j]; v++) {
+							l0 = (*infov[j])[v,1],1 \ (*infov[j])[v,2],1
+							fgtx = fgtx \ _fGini(y[|l0|] , wt_m[|l0|])		
+						}					
+					}
+					else fgtx = fgtx \ _fGini(y,wt_m)
+				}			
+				block0 = block0, fgtx[2..rows(fgtx),1]			
+				fgtx = NULL
+			} //ngini
+			
 			//add blocks
 			block = block \ block0
 			sim0 = sim0 + 1
 		} //m
 
-		
 		printf(".")
 		if (mod(s,50)==0) printf(" %5.0f\n",s)
 		displayflush()
@@ -3309,7 +3329,6 @@ void _s2sc_sim_molina(string scalar xvar,
 	
 	xb1=xb = area_v = wt_v = wt_m = pl_v = NULL
 	block0 = y = wt0 = wt = area = wy = running = wt_p = rgap = plvalue = lny = wlny = info = areaid = nhh = NULL
-	
 	
 	//export results to Stata
 	block = block[2..rows(block),.]
@@ -3363,6 +3382,7 @@ void _s2sc_sim_ebp(string scalar xvar,
 	agglist = strtoreal(tokens(st_local("aggids")))  //aggregation levels
 	fgtlist = tokens(st_local("fgtlist"))            //FGT list
 	gelist  = tokens(st_local("gelist"))			 //GE list
+	glist   = tokens(st_local("glist"))
 	pl      = strtoreal(tokens(plvar))               //Pov Line
 	plreal = 1
 	if (missing(pl)>0) {
@@ -3400,7 +3420,6 @@ void _s2sc_sim_ebp(string scalar xvar,
 	//Dimensions of data...
 	colsx   = cols(x)
 
-	
 	//Check if X and other variables (varinmodel local)
 	e3499 = _fvarscheck(varinmod, varlist)
 	if (e3499==1) {
@@ -3408,7 +3427,6 @@ void _s2sc_sim_ebp(string scalar xvar,
 		_error(3499)
 	}
 	
-
 	//sort is done before and setup area panel
 	area_v = _fgetcoldata(_fvarindex(area[1], varlist), fhcensus, p0, p1-p0)
 	display("{it:Number of observations in target dataset:}")
@@ -3435,7 +3453,6 @@ void _s2sc_sim_ebp(string scalar xvar,
 			_error(4443)
 		}
 	}
-	
 	
 	wt_v = select(_fgetcoldata(_fvarindex(wt[1], varlist), fhcensus, p0, p1-p0), mask)
 	nHHLDs = rows(wt_v)
@@ -3487,6 +3504,11 @@ void _s2sc_sim_ebp(string scalar xvar,
 			senames = senames, "se_" + gelist[ind]
 		}
 	}
+	ngini = cols(glist)
+	if (ngini>0) {
+		rmatnames = rmatnames, "avg_gini"
+		senames = senames, "se_gini"
+	}
 	rmatnames = rmatnames, senames
 
 	if (npovlines>0 & nfgts>0 & plreal==0) {
@@ -3502,7 +3524,7 @@ void _s2sc_sim_ebp(string scalar xvar,
 			"{hline 3}{c +}{hline 3} 4 " + "{hline 3}{c +}{hline 3} 5 ")
 	
 	if (st_local("ydump")==""){
-		block = J(1, 5 + nfgts*npovlines + nges,.)
+		block = J(1, 5 + nfgts*npovlines + nges + ngini,.)
 		sim0 = 1
 		if (appendit==1){
 			block11=block
@@ -3549,9 +3571,7 @@ void _s2sc_sim_ebp(string scalar xvar,
 					m3 = eb_eta[j,3],. \ eb_eta[j,4],.
 					xsvy[|m3|] = xsvy[|m3|] :+eta
 				}
-				
 			}
-			
 		}
 		else{
 			for(j=1; j<=rowsinfo; j++) {
@@ -3660,6 +3680,24 @@ void _s2sc_sim_ebp(string scalar xvar,
 						A = fgtx = current = NULL	
 					} //ind
 				} //nges
+				
+				//_fGini(x, w)
+				if (ngini>0) {
+					fgtx = J(1,1,.)
+					for (j=1; j<=nagg; j++) {							
+						if (nrow[j] >=2) {					
+							//each info panel
+							for (v=1; v<=nrow[j]; v++) {
+								l0 = (*infov[j])[v,1],1 \ (*infov[j])[v,2],1
+								fgtx = fgtx \ _fGini(y[|l0|] , wt_m[|l0|])	
+							}					
+						}
+						else fgtx = fgtx \ _fGini(y,wt_m)
+					}			
+					block0 = block0, fgtx[2..rows(fgtx),1]			
+					fgtx = NULL
+				} //ngini
+				
 				//add blocks
 				block = block \ block0
 				sim0 = sim0 + 1
@@ -3763,6 +3801,24 @@ void _s2sc_sim_ebp(string scalar xvar,
 						A = fgtx = current = NULL	
 					} //ind
 				} //nges
+				
+				//_fGini(x, w)
+				if (ngini>0) {
+					fgtx = J(1,1,.)
+					for (j=1; j<=nagg; j++) {							
+						if (nrow11[j] >=2) {					
+							//each info panel
+							for (v=1; v<=nrow11[j]; v++) {
+								l0 = (*infov11[j])[v,1],1 \ (*infov11[j])[v,2],1
+								fgtx = fgtx \ _fGini(y[|l0|] , wt_m[|l0|])	
+							}					
+						}
+						else fgtx = fgtx \ _fGini(y,wt_m)
+					}			
+					block0 = block0, fgtx[2..rows(fgtx),1]			
+					fgtx = NULL
+				} //ngini
+		
 				//add blocks
 				block11 = block11 \ block01
 			} //m
@@ -3789,7 +3845,6 @@ void _s2sc_sim_ebp(string scalar xvar,
 		block0 = block01 = wt0 = wt = y =area = wy = running = wt_p = rgap = plvalue = lny = wlny = info = areaid = nhh = NULL
 	}
 	
-
 	//Export results to STata
 	block = block[2..rows(block),.] 
 	_sort(block, (2,1))
@@ -3801,7 +3856,6 @@ void _s2sc_sim_ebp(string scalar xvar,
 		rmats=""
 		for(j=5; j<=cols(block); j++) rmats = rmats+" "+ rmatnames[1,j]
 		st_local("_varnames",rmats)
-	
 	
 	if (appendit==1){
 		block11[.,4] = block11[.,4]*sim 
@@ -3969,6 +4023,7 @@ void _s2sc_sim_ebp2(string scalar xvar,
 	agglist = strtoreal(tokens(st_local("aggids")))  //aggregation levels
 	fgtlist = tokens(st_local("fgtlist"))            //FGT list
 	gelist  = tokens(st_local("gelist"))			 //GE list
+	glist   = tokens(st_local("glist"))
 	pl      = strtoreal(tokens(plvar))               //Pov Line
 	plreal = 1
 	if (missing(pl)>0) {
@@ -3977,7 +4032,6 @@ void _s2sc_sim_ebp2(string scalar xvar,
 	}
 	
 	colsbsim = cols(bsim)  //Num of beta
-	
 	
 	//WARNING: area must be sorted outside in Stata
 	//census data - or use other way, ie seek(fh, (N*8+77)*6 ,-1) to get the 7th column
@@ -4008,7 +4062,6 @@ void _s2sc_sim_ebp2(string scalar xvar,
 	//Dimensions of data...
 	colsx   = cols(x)
 
-	
 	//Check if X and other variables (varinmodel local)
 	e3499 = _fvarscheck(varinmod, varlist)
 	if (e3499==1) {
@@ -4037,8 +4090,7 @@ void _s2sc_sim_ebp2(string scalar xvar,
 	display("{it:Number of areas in target dataset:}")
 	rowsinfoL
 	display("...")
-	
-		
+			
 	//Check for WEIGHT on Survey
 	if (appendit==1 & _complex==0){
 		totweight=quadsum(wsvy)	
@@ -4047,8 +4099,7 @@ void _s2sc_sim_ebp2(string scalar xvar,
 			_error(4443)
 		}
 	}
-	
-	
+		
 	wt_v = (_fgetcoldata(_fvarindex(wt[1], varlist), fhcensus, p0, p1-p0))[selectindex(mask),.] //select(_fgetcoldata(_fvarindex(wt[1], varlist), fhcensus, p0, p1-p0), mask) //pull weight from mata census
 	nHHLDs = rows(wt_v) // number of observations in census, ready for imputing
 	area2 = area_vS[selectindex(mask)] //select(area_vS, mask)  //extract only relevant observations for area vector
@@ -4099,14 +4150,18 @@ void _s2sc_sim_ebp2(string scalar xvar,
 			senames = senames, "se_" + gelist[ind]
 		}
 	}
+	ngini = cols(glist)
+	if (ngini>0) {
+		rmatnames = rmatnames, "avg_gini"
+		senames = senames, "se_gini"
+	}
 	rmatnames = rmatnames, senames
 
 	if (npovlines>0 & nfgts>0 & plreal==0) {
 		plvalue = J(1,npovlines, NULL)
 		for (l=1; l<=npovlines; l++) plvalue[l] = &(_fgetcoldata(_fvarindex(pl[l], varlist), fhcensus, p0, p1-p0)[selectindex(mask)])
 	}		
-	
-	
+		
 	printf("{txt}\nNumber of simulations: {res}%g{txt}", sim)
 	printf("{txt}\nEach dot (.) represents {res}%g{txt} simulation(s).\n", 1)
 	display("{txt}{hline 4}{c +}{hline 3} 1 " +
@@ -4114,7 +4169,7 @@ void _s2sc_sim_ebp2(string scalar xvar,
 			"{hline 3}{c +}{hline 3} 4 " + "{hline 3}{c +}{hline 3} 5 ")
 	
 	if (st_local("ydump")==""){
-		block = J(1, 5 + nfgts*npovlines + nges,.)
+		block = J(1, 5 + nfgts*npovlines + nges + ngini,.)
 		sim0 = 1
 		if (appendit==1){
 			block11=block
@@ -4122,7 +4177,6 @@ void _s2sc_sim_ebp2(string scalar xvar,
 		}
 	}
 	
-
 	    //Most important bit in all of this code...
 		//Build survey info...
 		//For smallest areas
@@ -4298,6 +4352,24 @@ void _s2sc_sim_ebp2(string scalar xvar,
 						A = fgtx = current = NULL	
 					} //ind
 				} //nges
+				
+				//_fGini(x, w)
+				if (ngini>0) {
+					fgtx = J(1,1,.)
+					for (j=1; j<=nagg; j++) {							
+						if (nrow[j] >=2) {					
+							//each info panel
+							for (v=1; v<=nrow[j]; v++) {
+								l0 = (*infov[j])[v,1],1 \ (*infov[j])[v,2],1
+								fgtx = fgtx \ _fGini(y[|l0|] , wt_m[|l0|])	
+							}					
+						}
+						else fgtx = fgtx \ _fGini(y,wt_m)
+					}			
+					block0 = block0, fgtx[2..rows(fgtx),1]			
+					fgtx = NULL
+				} //ngini
+				
 				//add blocks
 				block = block \ block0
 				sim0 = sim0 + 1
@@ -4326,7 +4398,6 @@ void _s2sc_sim_ebp2(string scalar xvar,
 		block0 = block01 = wt0 = wt = y =area = wy = running = wt_p = rgap = plvalue = lny = wlny = info = areaid = nhh = NULL
 	}
 	
-
 	//Export results to STata
 	block = block[2..rows(block),.] 
 	_sort(block, (2,1))
