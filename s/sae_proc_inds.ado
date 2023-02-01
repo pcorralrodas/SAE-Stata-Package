@@ -1,8 +1,10 @@
-*! sae_proc_inds.ado version 0.2.0  02jun2017
+*! sae_proc_inds.ado version 0.3.0  02jun2017
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 *! Paul Andres Corral Rodas - pcorralrodas@worldbank.org
 *! Joao Pedro Azevedo - jazevedo@worldbank.org
 *! Qinghua Zhao  
+
+//0.3.0 Add gini
 
 cap program drop sae_proc_inds
 program define sae_proc_inds
@@ -27,7 +29,7 @@ program define sae_proc_inds
 	local indicators = lower("`indicators'")
 	local fgtlist
 	local gelist
-	*local ginilist
+	local glist
 	*local atklist
 	foreach ind of local indicators {
 		if  "`ind'"=="fgt0" local fgtlist "`fgtlist' `ind'"
@@ -38,7 +40,7 @@ program define sae_proc_inds
 		if  "`ind'"=="ge1" local gelist "`gelist' `ind'"
 		if  "`ind'"=="ge2" local gelist "`gelist' `ind'"
 		
-		*if  "`ind'"=="gini" local ginilist "`ginilist' `ind'"
+		if  "`ind'"=="gini" local glist "`glist' `ind'"
 		*if  "`ind'"=="atk2" local atklist "`atklist' `ind'"
 	}
 	local plinesused : list plinevar | plines

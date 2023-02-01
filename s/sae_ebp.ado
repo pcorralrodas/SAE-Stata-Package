@@ -81,6 +81,7 @@ set more off
 	local indicators = lower("`indicators'")
 	local fgtlist
 	local gelist
+	local glist
 	foreach ind of local indicators {
 		if  "`ind'"=="fgt0" local fgtlist "`fgtlist' `ind'"
 		if  "`ind'"=="fgt1" local fgtlist "`fgtlist' `ind'"
@@ -88,6 +89,7 @@ set more off
 		if  "`ind'"=="ge0" local gelist "`gelist' `ind'"
 		if  "`ind'"=="ge1" local gelist "`gelist' `ind'"
 		if  "`ind'"=="ge2" local gelist "`gelist' `ind'"
+		if  "`ind'"=="gini" local glist "`glist' `ind'"
 	}	
 	
 	local indicators = upper("`indicators'")
@@ -251,9 +253,7 @@ set more off
 		//local indicators -> already specified above
 		
 		local matay 1
-		
-	
-		
+			
 		mata: varU = `uvar'
 		mata: varE = `evar'
 		
