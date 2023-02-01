@@ -36,7 +36,6 @@ program define sae_ebp, eclass byable(recall)
 	lny
 	bcox
 	lnskew
-	CONStant(real 0.0)
 	seed(string)
 	plinevar(string) 
 	PLINEs(numlist sort)
@@ -95,8 +94,8 @@ set more off
 	
 	if ("`appendsvy'"!=""){
 		local I FGT0 FGT1 FGT2
-		local indicators: list indicators & I
-		if ("`indicators'"==""){
+		local check: list indicators - I
+		if ("`check'"!=""){
 			dis as error "appendsurvey option only works with FGT indicators"
 			error 198
 			exit
@@ -164,7 +163,7 @@ set more off
 	
 	if (`bcox'==1){
 		tempvar Thedep
-		bcskew0 double `Thedep' = (`lhs'+`constant') if `touse23'==1
+		bcskew0 double `Thedep' = (`lhs') if `touse23'==1
 		local lhs `Thedep'
 		local lambda = r(lambda)
 	}
@@ -329,8 +328,8 @@ set more off
 			//Add unboxcoxing!! This is why you are getting larger MSE
 			if (`lny'==0 & `bcox'==0 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", _MyebpY)                      //New Y for the bootstrap
 			if (`lny'==1 & `bcox'==0 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", ln(_MyebpY))                  //New Y for the bootstrap
-			if (`lny'==0 & `bcox'==1 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", _bcsk(_MyebpY,`lambda', `constant'))      //New Y for the bootstrap
-			if (`lny'==1 & `bcox'==1 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", (_bcsk(ln(_MyebpY),`lambda',`constant'))) //New Y for the bootstrap
+			if (`lny'==0 & `bcox'==1 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", _bcsk(_MyebpY,`lambda'))      //New Y for the bootstrap
+			if (`lny'==1 & `bcox'==1 & `lnskew'==0) qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", (_bcsk(ln(_MyebpY),`lambda'))) //New Y for the bootstrap
 			if (`lnskew'==1)						qui:mata: st_store(.,st_varindex(tokens("_NeWy")),"__my_tOuse", (ln(_MyebpY:-`lambda')))                  //New Y for the bootstrap
 			qui:xtmixed _NeWy `_Xx' if `touse'==1 || `area':, reml difficult
 			predict double _EtaA, reffects

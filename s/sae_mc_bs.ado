@@ -37,7 +37,6 @@ program define sae_mc_bs, eclass byable(recall)
 	bcox
 	lnskew
 	s2s_spec
-	CONStant(real 0.0)
 	Zvar(varlist numeric fv) 
 	yhat(varlist numeric fv) 
 	yhat2(varlist numeric fv)
@@ -137,7 +136,7 @@ set more off
 *===============================================================================
 	if (`bcox'==1){
 		tempvar Thedep
-		bcskew0 double `Thedep' = (`lhs'+`constant') if `touse23'==1
+		bcskew0 double `Thedep' = (`lhs') if `touse23'==1
 		local lhs `Thedep'
 		local lambda = r(lambda)
 	}
@@ -258,7 +257,7 @@ set more off
 	foreach x of varlist *{		
 		local isin: list x & nogo
 		if ("`isin'"==""){
-			if (!(regexm("`x'","StdErr")|(regexm("`x'","se_fgt")))){
+			if (!(regexm("`x'","StdErr")|(regexm("`x'","se_")))){
 				local _finvars `_finvars' `x'
 			}
 		}
@@ -268,6 +267,7 @@ set more off
 	
 	tempfile eb_est
 	qui:save `eb_est'
+	
 *===============================================================================
 // Run the Bootstrap
 *===============================================================================
