@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.0.0  11Jan2020}{...}
+{* *! version 1.0.1  23/02/2023}{...}
 {cmd:help sae_mc_bs}
 {hline}
 
@@ -92,6 +92,9 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 
 {phang}
 {opt lnskew} Option tells command to execute lnskew0 (log shift transform - Zero skewness) on the dependent variable of your model.
+
+{phang}
+{opt lnskew_w} Option tells command to execute lnskew0 (log shift transform - Zero skewness) on the dependent variable of your model. It allows for the use of survey weights in transformation.
 
 {phang}
 {opt s2s_spec} option indicates that the survey is not a subset of the census and allows for cases where an area used for the model is not present in the census.
