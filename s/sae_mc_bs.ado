@@ -1,4 +1,4 @@
-*! version 0.3.0  July 3, 2020
+*! version 0.3.1  23/02/2023
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 *! Paul Andres Corral Rodas - pcorralrodas@worldbank.org
 *! Joao Pedro Azevedo - jazevedo@worldbank.org
@@ -36,6 +36,7 @@ program define sae_mc_bs, eclass byable(recall)
 	lny
 	bcox
 	lnskew
+	lnskew_w
 	s2s_spec
 	Zvar(varlist numeric fv) 
 	yhat(varlist numeric fv) 
@@ -119,12 +120,14 @@ set more off
 		local wvar `w'
 	}
 	
-	if ("`lny'"!="")    local lny = 1
-	else                local lny = 0
-	if ("`bcox'"!="")   local bcox = 1
-	else                local bcox = 0
-	if ("`lnskew'"!="") local lnskew = 1
-	else                local lnskew = 0
+	if ("`lny'"!="")      local lny = 1
+	else                  local lny = 0
+	if ("`bcox'"!="")     local bcox = 1
+	else                  local bcox = 0
+	if ("`lnskew'"!="")   local lnskew = 1
+	else                  local lnskew = 0
+	if ("`lnskew_w'"!="") local lnskew_w = 1
+	else                  local lnskew_w = 0
 	
 	if (((`lnskew'+`bcox') ==2)){
 		display as error "lnskew option can's be used with bcox option"
@@ -153,6 +156,21 @@ set more off
 		local lhs `Thedep'
 		local lambda = r(gamma)
 	}
+	if (`lnskew_w'==1 & `lny'==1){
+		tempvar Thedep
+		lnskew0w double `Thedep' = exp(`lhs') if `touse23'==1, weight(`wvar')
+		local lhs `Thedep'
+		local lambda = r(gamma)
+		local lnskew = 1
+	}
+	if (`lnskew_w'==1 & `lny'==0){
+		tempvar Thedep
+		lnskew0w double `Thedep' = `lhs' if `touse23'==1, weight(`wvar')
+		local lhs `Thedep'
+		local lambda = r(gamma)
+		local lnskew = 1
+	}
+	
 
 	povmap `lhs' `_Xx' if `touse23'==1 [aw=`wvar'], area(`area') ///
 	varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest uniq(`uniqid') seed(`seed') stage(first) new
