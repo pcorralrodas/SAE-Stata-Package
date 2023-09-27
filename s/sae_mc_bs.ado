@@ -46,6 +46,7 @@ program define sae_mc_bs, eclass byable(recall)
 	PLINEs(numlist sort)
 	ydump(string)
 	addvars(string)
+	method(string)
 	];
 #delimit cr
 set more off
@@ -64,6 +65,16 @@ set more off
 	
 	foreach vs in varest{
 		local `vs' = lower("``vs''")
+	}
+	
+	//Matrix inversion method
+	local method = lower("`method'")
+	local metodos invsym luinv luinv_la cholinv cholinv_la
+	local _vale : list method & metodos
+	if (missing("`_vale'")){
+		dis as error "You've specified matrix inversion method which is nto allowed"
+		error 198
+		exit
 	}
 	
 	//Special for S2S
@@ -173,7 +184,7 @@ set more off
 	
 
 	povmap `lhs' `_Xx' if `touse23'==1 [aw=`wvar'], area(`area') ///
-	varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest uniq(`uniqid') seed(`seed') stage(first) new
+	varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest uniq(`uniqid') seed(`seed') stage(first) method(`method') new 
 
 *===============================================================================
 // Pull necessary information produced by model for simulation
@@ -341,7 +352,7 @@ set more off
 		local seed `c(rngstate)'
 				
 		qui:cap povmap _NeWy `_Xx' if `touse23'==1 [aw=`wvar'], area(`area') ///
-		varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest seed(`seed') uniq(`uniqid') stage(first) new
+		varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest seed(`seed') uniq(`uniqid') stage(first) method(`method') new
 		if (_rc==73943){
 			local z=`z'
 			dis as error "Negative sigma eta Sq., I'm re-running this iteration...`z'"

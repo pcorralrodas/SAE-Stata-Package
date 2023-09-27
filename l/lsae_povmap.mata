@@ -1370,6 +1370,11 @@ function _f_hh_gls2(real matrix y, real matrix x, real matrix wt, real matrix si
 	xtwex = xtwewx = J(cols(x), cols(x), 0)
 	xtwey = J(cols(x), 1, 0)
 	N = rows(info)
+//# Bookmark #1
+	if (st_local("method")=="" | strtoreal(st_local("method"))==0) el_m = 0
+	else{
+		el_m = strtoreal(st_local("method"))
+	}
 	//Loop through clusters 
 	for (i=1; i<=N; i++) {	
 		thesub = info[i,1],. \ info[i,2],.
@@ -1381,14 +1386,38 @@ function _f_hh_gls2(real matrix y, real matrix x, real matrix wt, real matrix si
 		cv     = diag(cv:/wt1) + (quadsum(wt1)/quadsum(wt1:^2))*J(rows(cv),rows(cv),sig_n)
 		x1     = x[|thesub|]
 		y1     = y[|thesub|]
-		_invsym(cv)
+		if (el_m==0) _invsym(cv)
+		else{
+			if (el_m==1) _luinv(cv)
+			else{
+				if (el_m==2) _luinv_lapacke(cv)
+				else{
+					if (el_m==3) _cholinv(cv)
+					else{
+						if (el_m==4) _cholinvlapacke(cv)
+					}
+				}
+			}
+		}
 		xt     = quadcross(x1,cv)
 		xtwex  = xtwex + quadcross(xt',x1)
 		xtwey  = xtwey + quadcross(xt',y1)
 		xtwewx = xtwewx + quadcross(quadcross(xt',v)',quadcross(cv,x1))
 	}
 	if (bs==0) {
-		_invsym(xtwex)
+		if (el_m==0) _invsym(xtwex)
+		else{
+			if (el_m==1) _luinv(xtwex)
+			else{
+				if (el_m==2) _luinv_lapacke(xtwex)
+				else{
+					if (el_m==3) _cholinv(xtwex)
+					else{
+						if (el_m==4) _cholinvlapacke(xtwex)
+					}
+				}
+			}
+		}
 		Beta2 = quadcross(xtwex,xtwey)
 		vcov2 = quadcross(quadcross((xtwex),xtwewx)',(xtwex))
 	}

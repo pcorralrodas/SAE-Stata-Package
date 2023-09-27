@@ -39,7 +39,7 @@ program define povmap, eclass byable(recall)
 	rep(integer 0) seed(string) matin(string) matbeta(string) ///
 	PWcensus(string) ydump(string) ydumpdta(string) numfiles(integer 1) prefix(string) ///
 	saveold RESults(string) addvars(string) BOOTstrap EBest allmata ///
-	COLprocess(integer 1) NOOUTput vce(string) INDicators(string) aggids(numlist sort) alfatest(string) new]
+	COLprocess(integer 1) NOOUTput vce(string) INDicators(string) aggids(numlist sort) alfatest(string) method(string) new]
 
 	if c(more)=="on" set more off
     local version : di "version " string(_caller()) ", missing:"
@@ -67,6 +67,22 @@ program define povmap, eclass byable(recall)
 	foreach vs in stage epsilon eta ebest epsdecomp vce glsmethod alfatest  {
 		local `vs' = lower("``vs''")
 	}
+	
+	local method = lower("`method'")
+	if (missing("`method'")) local method invsym
+	local metodos invsym luinv luinv_la cholinv cholinv_la
+	local _vale : list method & metodos
+	if (missing("`_vale'")){
+		dis as error "You've specified matrix inversion method which is nto allowed"
+		error 198
+		exit
+	}
+	local a = 0
+	foreach met of local metodos{
+		if ("`method'"=="`met'") local method = `a'
+		local ++a
+	}
+
 	
 	// Ensure that EB is only done with the new codes...
 	if (lower("`varest'")=="h3" & "`stage'"=="second"){
