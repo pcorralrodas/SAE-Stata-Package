@@ -68,13 +68,16 @@ set more off
 	}
 	
 	//Matrix inversion method
-	local method = lower("`method'")
-	local metodos invsym luinv luinv_la cholinv cholinv_la
-	local _vale : list method & metodos
-	if (missing("`_vale'")){
-		dis as error "You've specified matrix inversion method which is nto allowed"
-		error 198
-		exit
+	if (missing("`method'")) local method invsym
+	else{
+		local method = lower("`method'")
+		local metodos invsym luinv luinv_la cholinv cholinv_la
+		local _vale : list method & metodos
+		if (missing("`_vale'")){
+			dis as error "You've specified matrix inversion method which is not allowed"
+			error 198
+			exit
+		}
 	}
 	
 	//Special for S2S
@@ -141,7 +144,7 @@ set more off
 	else                  local lnskew_w = 0
 	
 	if (((`lnskew'+`bcox') ==2)){
-		display as error "lnskew option can's be used with bcox option"
+		display as error "lnskew option can't be used with bcox option"
 		error 198
 		exit
 	}
