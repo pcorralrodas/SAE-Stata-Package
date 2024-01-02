@@ -4,9 +4,9 @@ clear all
 global dpath "C:\Users\\`c(username)'\OneDrive\WPS_2020\7.twofold\"
 
 
-run "C:\Users\WB378870\GitHub\SAE-Stata-Package\s\sae_mc_bs.ado"
-run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
-run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lnskew0w.ado"
+//run "C:\Users\WB378870\GitHub\SAE-Stata-Package\s\sae_mc_bs.ado"
+//run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
+//run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lnskew0w.ado"
 
 /*
 Do file below is a test for a two fold nested error model. It follows the method 
@@ -104,7 +104,9 @@ We start off by creating a fake data set as illustrated in that same paper.
 	tempfile test
 	
 	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(1) matin("$dpath\censo") ///
-	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny s2s_spec
+	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny s2s_spec ///
+	ydump(`test')
+	
 	
 	sae data export, matasource(`test')
 	
