@@ -25,10 +25,14 @@ program sae, rclass
 	gettoken subcmd 0 : 0, parse(" :,=[]()+-")
 	local l = strlen("`subcmd'")
 	
-	cap findfile  "lsae_povmap.mata"
+	cap findfile  "lsae_povmap.mlib"
 	if _rc{
-		findfile "lsae_povmap.mata"
-		run "`r(fn)'"
+		cap findfile "lsae_povmap.mata"
+		if _rc{
+			dis as error "I'm unable to find the file: \l\lsae_povmap.mata. Please locate it and run it from your do file editor. This must be done only once."
+			exit
+		}
+		else run "`r(fn)'"
 	}
 	
 	if ("`subcmd'"=="data") { //data relelated tasks
