@@ -1,4 +1,4 @@
-*! version 0.3.0  July 3, 2020
+*! version 0.4.0  August 14, 2024
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 *! Paul Andres Corral Rodas - pcorralrodas@worldbank.org
 *! Joao Pedro Azevedo - jazevedo@worldbank.org
@@ -363,10 +363,12 @@ program define povmap, eclass byable(recall)
 	//gen __hsyk0_0 = `mmypsu'
 	//Estimates from the modeling parts
 	
-	tempfile srcdata
-	qui:save `srcdata'
-	
-	local cmd1 use `srcdata', replace
+	if (`boots'==1){
+		tempfile srcdata
+		qui:save `srcdata'
+		
+		local cmd1 use `srcdata', replace
+	}
 	local cmd2 bsample, cluster(__hsyk0_0)
 	local cmd3 sort `area'
 
