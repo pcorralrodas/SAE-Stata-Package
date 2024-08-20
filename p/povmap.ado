@@ -362,13 +362,12 @@ program define povmap, eclass byable(recall)
 	
 	//gen __hsyk0_0 = `mmypsu'
 	//Estimates from the modeling parts
-	
+
 	if (`boots'==1){
 		tempfile srcdata
 		qui:save `srcdata'
-		
-		local cmd1 use `srcdata', replace
 	}
+	local cmd1 use `srcdata', replace
 	local cmd2 bsample, cluster(__hsyk0_0)
 	local cmd3 sort `area'
 

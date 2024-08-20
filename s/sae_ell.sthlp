@@ -23,7 +23,7 @@
 ]
 
 {p 8 23 2}
-{opt sae sim elleb} {varlist} {ifin} {weight} {cmd:,}
+{opt sae sim ell} {varlist} {ifin} {weight} {cmd:,}
 {opt area(varname)}
 {opt UNIQid(varname numeric)}
 {opt rep(integer)}

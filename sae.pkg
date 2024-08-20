@@ -5,7 +5,7 @@ d Distribution-Date: 10/10/21
 d 
 d 
 F l/lsae_povmap.mata
-F l/lsae_povmap.mlib
+F l/lnskew0w.ado
 F p/povmap.ado
 F s/sae.ado
 F s/sae.sthlp
@@ -18,7 +18,7 @@ F s/sae_data_import.sthlp
 F s/sae_ebp.ado
 F s/sae_ebp.sthlp
 F s/sae_ebp_two.ado
-F s/sae_ebp_two.sthlp
+F s/sae_ebp2.sthlp
 F s/sae_ell.sthlp
 F s/sae_mc_bs.ado
 F s/sae_mc_bs.sthlp

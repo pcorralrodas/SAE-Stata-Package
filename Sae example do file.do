@@ -4,9 +4,11 @@ clear all
 global dpath "C:\Users\\`c(username)'\OneDrive\WPS_2020\7.twofold\"
 
 
+
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\s\sae_mc_bs.ado"
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\p\povmap.ado"
+
 
 /*
 Do file below is a test for a two fold nested error model. It follows the method 
@@ -116,6 +118,7 @@ We start off by creating a fake data set as illustrated in that same paper.
 	
 	
 	sss
+
 	
 	sae data export, matasource(`test')
 	
