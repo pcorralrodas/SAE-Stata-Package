@@ -4,9 +4,11 @@ clear all
 global dpath "C:\Users\\`c(username)'\OneDrive\WPS_2020\7.twofold\"
 
 
-//run "C:\Users\WB378870\GitHub\SAE-Stata-Package\s\sae_mc_bs.ado"
-//run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
-//run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lnskew0w.ado"
+
+run "C:\Users\WB378870\GitHub\SAE-Stata-Package\s\sae_mc_bs.ado"
+run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
+run "C:\Users\WB378870\GitHub\SAE-Stata-Package\p\povmap.ado"
+
 
 /*
 Do file below is a test for a two fold nested error model. It follows the method 
@@ -101,12 +103,22 @@ We start off by creating a fake data set as illustrated in that same paper.
 	
 	use `ladata', clear
 	
+	/*//set trace on
+	//Options for method: invsym luinv luinv_la cholinv cholinv_la
+	sae model h3 Y x1 x2, area(HID) yhat(uno) method(invsym)
+	
+	
+	
+	ssss
+	*/
 	tempfile test
-	
+
 	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(1) matin("$dpath\censo") ///
-	ind(FGT0) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny s2s_spec ///
-	ydump(`test')
+	ind(FGT0 gini) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny s2s_spec 
 	
+	
+	sss
+
 	
 	sae data export, matasource(`test')
 	

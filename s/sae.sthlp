@@ -34,12 +34,12 @@ The {cmd:sae} suite of commands are made for small area estimation. To become fa
 	   for survey weights and heteroskedasticity with
 	   one-fold nested error models see:
 {col 7}{...}
-	   {bf:{help sae_mc_bs:[SAE] sae h3}} 
+	  {bf:{help sae_mc_bs:[SAE] sae h3}} 
 	4. ELL estimation under GLS model allowing 
 	   for survey weights and heteroskedasticity with
 	   one-fold nested error models see:
 {col 7}{...}
-	   {bf:{help sae_ell:[SAE] sae ell}}  
+	  {bf:{help sae_ell:[SAE] sae ell}}  
 	   
 {p 4 4 2}
 To perform data related functions such as to import the target dataset to a more manageable

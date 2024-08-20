@@ -25,6 +25,7 @@
 {opt lny}
 {opt bcox}
 {opt lnskew}
+{opt lnskew_w}
 {opt s2s_spec}
 {opt CONStant(real 0.0)}
 {opt Zvar(varlist numeric fv)} 
@@ -35,6 +36,7 @@
 {opt PLINEs(numlist sort)}
 {opt ydump(string)}
 {opt addvars(varlist numeric fv)}
+{method(string)}
 ]
 
 {title:Description}
@@ -113,6 +115,9 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 
 {phang}
 {opt addvars(varlist numeric fv)} The addvars option allows users to add variables to the dataset created from the simulations. These variables must have been included into the target dataset created with the sae data import command.
+
+{phang}
+{opt method(string)} The method option allows users to specify different inverters for the GLS estimation. Options include  cholinv, cholinv_la, luinv, luinv_la. Changing the inverter can yield considerable speed gains.
 
 
 {title:Examples}
