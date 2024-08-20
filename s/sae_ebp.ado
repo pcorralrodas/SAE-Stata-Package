@@ -75,6 +75,14 @@ set more off
 		exit
 	}
 	
+	//Add error for EBP and plinevar
+	if "`plinevar'"!="" & !missing("`appendsvy'"){
+		dis as error "I'm sorry, the plinevar option is not compatible with appendsvy option"
+		dis "If you want EB estimates please use plines()"
+		error 198
+		exit
+	}
+	
 
 	//Indicator checklist
 	if "`indicators'"=="" local indicators fgt0
