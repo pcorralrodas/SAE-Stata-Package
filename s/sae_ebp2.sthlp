@@ -114,6 +114,9 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 {phang}
 {opt PLINEs(numlist sort)} option allows users to explicitly indicate the threshold to be used, this option is preferred when the threshold is constant across all observations. Additionally, it is possible to specify multiple lines, separated by a space.
 
+{phang}
+{opt appendsvy} Option allows for full implementation of Molina and Rao's EB predictor, and ensures EB estimates utilize sampled observations and non-sampled observations. If option is not specified it will implement Census EB, see Corral, Molina, Nguyen (2020).
+
 
 {title:Example}
 sae sim reml2 Y x1 x2 x3 x4 x5 x6,  area(area)  ///
