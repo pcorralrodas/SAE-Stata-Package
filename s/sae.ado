@@ -72,14 +72,14 @@ program sae, rclass
 			local ch: list 0 & etapa
 			if ("`ch'"=="") local 0 `0' stage(first)
 			
-			if ("`subcmd1'"!="lmm") povmap `0' varest(`subcmd1') new
+			if ("`subcmd1'"!="lmm") povmap `0' varest(`subcmd1') new seed(`c(rngstate)')
 			else  povmap `0'
 		}
 		else if ("`subcmd1'"=="reml") {
-			sae_ebp `0' model mcrep(0) bsrep(0) matin(NO) pwcensus(XX) indicators(fgt0) aggids(0) pwsurvey(XX)
+			sae_ebp `0' model mcrep(0) bsrep(0) matin(NO) pwcensus(XX) indicators(fgt0) aggids(0) pwsurvey(XX) seed(`c(rngstate)')
 		}
 		else if ("`subcmd1'"=="reml2") {
-			sae_ebp_two `0' model mcrep(0) bsrep(0) matin(NO) pwcensus(XX) indicators(fgt0) aggids(0) pwsurvey(XX)
+			sae_ebp_two `0' model mcrep(0) bsrep(0) matin(NO) pwcensus(XX) indicators(fgt0) aggids(0) pwsurvey(XX) seed(`c(rngstate)')
 		}
 		else {
 			if ("`subcmd1'"=="") {
