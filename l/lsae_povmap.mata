@@ -1370,7 +1370,6 @@ function _f_hh_gls2(real matrix y, real matrix x, real matrix wt, real matrix si
 	xtwex = xtwewx = J(cols(x), cols(x), 0)
 	xtwey = J(cols(x), 1, 0)
 	N = rows(info)
-//# Bookmark #1
 	if (st_local("method")=="" | strtoreal(st_local("method"))==0) el_m = 0
 	else{
 		el_m = strtoreal(st_local("method"))

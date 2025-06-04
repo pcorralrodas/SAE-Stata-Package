@@ -47,6 +47,9 @@ program define sae_mc_bs, eclass byable(recall)
 	ydump(string)
 	addvars(string)
 	method(string)
+	BENCHmarklevel(numlist sort)
+	BMindicator(string)
+	Wbm(varname numeric)
 	];
 #delimit cr
 set more off
@@ -148,10 +151,38 @@ set more off
 		error 198
 		exit
 	}
-		
+	
+	//Benchmarking
+	local elbm = 1
+	local bmindicator = upper("`bmindicator'")
+	if (missing("`benchmarklevel'") & ~missing("`bmindicator'")) local elbm = 0
+	if (~missing("`benchmarklevel'") & missing("`bmindicator'")) local elbm = 0
+	if (`elbm'==0){
+		dis as error "benchmarklevel() and bmindicator() must be used together"
+		error 198
+		exit
+	}
+	if (~missing("`benchmarklevel'") & missing("`aggids'")){
+		dis as error "When using benchmarklevel() you must specify the aggids() option"
+		error 198
+		exit
+	}
+	//Check if the bmindicator() was specified in indicartors
+	// For now only mean and fgt0
+	if (~missing("`bmindicator'")){
+		local allowed MEAN FGT0
+		local not_in_bm: list bmindicator - allowed
+		if (~missing("`not_in_bm'")){
+			dis as error "`not_in_bm' are not supported for benchmarking"			
+			error 198
+			exit
+		}
+	}
+			
 *===============================================================================
 // Run model...
 *===============================================================================
+	local original_y `lhs'
 	if (`bcox'==1){
 		tempvar Thedep
 		bcskew0 double `Thedep' = (`lhs') if `touse23'==1
@@ -211,9 +242,49 @@ set more off
 		mata: _sige2      = *allest[3,25]
 		qui:gen double __SiGma2 = .
 		mata: st_store(.,st_varindex(tokens("__SiGma2")),"`touse'",sqrt(_sige2))
-
+	
 	tempfile mydata
 	save `mydata'
+	
+*===============================================================================
+// Produce benchmark estimates - if requested!!
+*===============================================================================
+if (~missing("`benchmarklevel'")){
+
+	//We'll use `Thedep'	
+	tempvar bm grupo
+	if (`lny'==1) gen double `bm' = exp(`original_y')
+	else clonevar `bm' = `original_y'
+	
+	gen double `grupo' = int(`area'/1e`benchmarklevel')
+	
+	//For now only poverty and mean
+	local tocollapse
+	local la_fgt0 FGT0
+	local la_media MEAN
+	local la_fgt0 : list bmindicator & la_fgt0
+	if (~missing("`la_fgt0'")){
+		if (~missing("`plinevar'")){
+			gen fgt0_`plinevar' = `bm' < `plinevar' if !missing(`bm')
+			local tocollapse fgt0_`plinevar'
+		}
+		foreach line of local plines{
+			mata: st_local("nom", strtoname(strofreal(`line')))
+			gen fgt0`nom' = `bm' < `line' if !missing(`bm')
+			local tocollapse `tocollapse' fgt0`nom'
+		}		
+	}	
+	local la_media: list bmindicator & la_media
+	if (~missing("`la_media'")){
+		clonevar theMean = `bm'
+		local tocollapse `tocollapse' theMean
+	}
+	groupfunction [aw=`wbm'], mean(`tocollapse') by(`grupo')
+	rename `grupo' Unit2
+	tempfile thebm
+	save `thebm'
+}
+
 	
 *===============================================================================
 // Specify other locals needed for the MC simulation
@@ -297,8 +368,24 @@ set more off
 	
 	keep nSim Unit nHH nIn `_finvars'
 	
+	if (~missing("`benchmarklevel'")){
+	preserve
+		gen double Unit2 = int(Unit/1e`benchmarklevel')
+		merge m:1 Unit2 using `thebm'
+			drop if _m!=3
+			drop _m		
+		
+		collapse (mean) Mean avg_* (first) `tocollapse' [aw=nIndividuals], by(Unit2)
+		foreach x of local tocollapse{
+			cap replace `x' = `x'/avg_`x'
+			if (_rc) replace `x' = `x'/Mean
+		}
+	}
+	
 	tempfile eb_est
 	qui:save `eb_est'
+	//Ok, so now I have a benchmark for each strata...
+	
 	
 *===============================================================================
 // Run the Bootstrap
