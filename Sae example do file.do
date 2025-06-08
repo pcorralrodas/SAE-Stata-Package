@@ -10,6 +10,8 @@ run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\p\povmap.ado"
 
 
+//https://onlinelibrary.wiley.com/doi/am-pdf/10.1111/insr.12380
+
 /*
 Do file below is a test for a two fold nested error model. It follows the method 
 illustrated in the paper from Molina and others in the link below.
@@ -127,9 +129,9 @@ version 16
 	//set trace on 
 	//set traced 2
 
-	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(1) matin("$dpath\censo") ///
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(2) matin("$dpath\censo") ///
 	ind(FGT0 gini) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`=exp(2.808841548218)') ///
-	 bench(2) bm(fgt0 mean) wbm(hhsize) lny s2s_spec method(luinv_la)
+	 bench(2) bm(fgt0 mean) wbm(hhsize) bcox lny s2s_spec method(luinv_la)
 	
 	
 	sss
