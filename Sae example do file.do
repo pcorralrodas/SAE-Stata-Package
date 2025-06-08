@@ -10,6 +10,8 @@ run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\p\povmap.ado"
 
 
+//https://onlinelibrary.wiley.com/doi/am-pdf/10.1111/insr.12380
+
 /*
 Do file below is a test for a two fold nested error model. It follows the method 
 illustrated in the paper from Molina and others in the link below.
@@ -72,6 +74,8 @@ We start off by creating a fake data set as illustrated in that same paper.
 	
 	gen Y = 3 + 0.03*x1 -0.04*x2 + u1 + u2 + e
 	
+	gen weights = runiform()
+	
 	gen E_Y = exp(Y) 
 	
 	sum E_Y,d
@@ -97,11 +101,17 @@ We start off by creating a fake data set as illustrated in that same paper.
 	save `censo'
 	
 	preserve
-	sae data import, datain("`censo'") varlist(x1 x2 uno hhsize pvar) ///
+	sae data import, datain("`censo'") varlist(x1 x2 uno hhsize pvar weights) ///
 			area(HID) uniqid(hhid) dataout("$dpath\censo") 
 	restore	
 	
 	use `ladata', clear
+	
+	sae model h3 Y x1 x2, area(dom)
+	mata: B=st_matrix("e(b)")
+	sae model h3 Y x1 x2, area(HID)
+	mata: B=B\st_matrix("e(b)")
+	mata B
 	
 	/*//set trace on
 	//Options for method: invsym luinv luinv_la cholinv cholinv_la
@@ -112,9 +122,16 @@ We start off by creating a fake data set as illustrated in that same paper.
 	ssss
 	*/
 	tempfile test
+version 16
 
-	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(1) matin("$dpath\censo") ///
-	ind(FGT0 gini) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) lny s2s_spec 
+	sum Y, d
+	
+	//set trace on 
+	//set traced 2
+
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(10) bsrep(2) matin("$dpath\censo") ///
+	ind(FGT0 gini) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`=exp(2.808841548218)') ///
+	 bench(2) bm(fgt0 mean) wbm(hhsize) bcox lny s2s_spec method(luinv_la)
 	
 	
 	sss

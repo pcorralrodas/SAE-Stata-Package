@@ -371,7 +371,7 @@ program define povmap, eclass byable(recall)
 	local cmd2 bsample, cluster(__hsyk0_0)
 	local cmd3 sort `area'
 
-	noi: mata: _s2cs_base0("`lhs'","`okvarlist'", "`zvarn'", "`yhatn'", "`yhat2n'", "`grvar'", "`wvar'", "`hhid1'", "`touse'")
+	qui: mata: _s2cs_base0("`lhs'","`okvarlist'", "`zvarn'", "`yhatn'", "`yhat2n'", "`grvar'", "`wvar'", "`hhid1'", "`touse'")
 	//OLS
 	mat rownames _vols = `bnames'
 	mat colnames _vols = `bnames'

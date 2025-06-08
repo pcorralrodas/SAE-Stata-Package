@@ -37,6 +37,9 @@
 {opt ydump(string)}
 {opt addvars(varlist numeric fv)}
 {method(string)}
+{opt BENCHmarklevel(numlist max=1)}
+{opt BMindicator(string)}
+{opt Wbm(varname numeric)}
 ]
 
 {title:Description}
@@ -119,13 +122,31 @@ simulated vectors of welfare. Possible indicators are: fgt0, fgt1, fgt2, ge0, ge
 {phang}
 {opt method(string)} The method option allows users to specify different inverters for the GLS estimation. Options include  cholinv, cholinv_la, luinv, luinv_la. Changing the inverter can yield considerable speed gains.
 
+{phang}
+{opt BENCHmarklevel(numlist max=1)} Specifies the aggregation level at which benchmarking should be applied. The user provides a non-negative integer indicating how many digits to the left to truncate from the area identifier in order to define the higher-level unit for benchmarking. This higher-level unit is typically a level at which the survey is representative. Benchmarking adjusts the model-based small area estimates to ensure consistency with direct estimates at this broader level of aggregation. 
+For example, if area codes are defined as 5-digit identifiers and the survey is representative at the 3-digit level, specifying benchmarklevel(2) will aggregate the estimates accordingly before benchmarking.
+
+{phang}
+{opt BMindicator(string)} Specifies the indicator(s) to be benchmarked. This option must be used in combination with benchmarklevel(). Benchmarking is currently supported only for two indicators: the mean of the welfare variable (mean) and the Foster-Greer-Thorbecke poverty headcount ratio (fgt0).
+Use this option to indicate which of these will be benchmarked to match direct estimates at the higher aggregation level defined by benchmarklevel(). If both are to be benchmarked, they should be listed in a space-separated string (e.g., "mean fgt0").
+
+{phang}
+{opt Wbm(varname numeric)} Specifies the weight variable to be used when benchmarking indicators. The provided variable must exist in the survey dataset and contain the weights appropriate for computing direct estimates at the aggregation level defined by benchmarklevel(). These weights ensure that benchmarking aligns the model-based estimates with properly weighted direct survey estimates.
+This option is required when using benchmarklevel() and BMindicator() to perform benchmarking.
+
 
 {title:Examples}
 
-//H3-EB estimates
+//H3-CensusEB estimates
 sae sim h3 Y x1 x2 x3 x4 x5 x6,  area(area)  ///
 mcrep(200) bsrep(200) matin("census") lny seed(31916) ///
 pwcensus(hhsize) indicators(FGT0 FGT1 FGT2) aggids(0) uniq(hhid_n) plines(16.2)
+
+//Benchmarked CensusEB estimates
+sae sim h3 Y x1 x2 x3 x4 x5 x6 [aw=hhweight],  area(area)  ///
+mcrep(200) bsrep(200) matin("census") lny seed(31916) ///
+pwcensus(hhsize) indicators(FGT0 FGT1 FGT2) aggids(0) ///
+uniq(hhid_n) plines(16.2) bench(2) bm(fgt0 mean) wbm(popweight)
 
 //ELL-EB estimates
 sae sim elleb Y x1 x2 x3 x4 x5 x6,  area(area)  ///
