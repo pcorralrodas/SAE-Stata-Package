@@ -27,7 +27,9 @@ program sae, rclass
 	
 	cap findfile  "lsae_povmap.mlib"
 	if _rc{
-		cap findfile "lsae_povmap.mata"
+		if (`c(version)'>=17) local lsae_file lsae_povmap.mata
+		else local lsae_file lsae_povmap_old.mata
+		cap findfile "`lsae_file'"
 		if _rc{
 			dis as error "I'm unable to find the file: \l\lsae_povmap.mata. Please locate it and run it from your do file editor. This must be done only once."
 			exit

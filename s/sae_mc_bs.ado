@@ -70,6 +70,7 @@ set more off
 		local `vs' = lower("``vs''")
 	}
 	
+	local lavers c(version)	
 	//Matrix inversion method
 	if (missing("`method'")) local method invsym
 	else{
@@ -81,6 +82,12 @@ set more off
 			error 198
 			exit
 		}
+	}
+	
+	if (`lavers'<17 & (`method'==2 | `method'==4)){
+		dis as error "Your stata version does not support the chosen matrix inversion method"
+		error 198
+		exit
 	}
 	
 	//Special for S2S
@@ -216,7 +223,9 @@ set more off
 		local lnskew = 1
 	}
 	
-
+	if (`c(version)'<17){
+		dis as error "If you get an error about lapacke, make sure you have the newest version and run l/lsae_povmap_old.mata" 
+	}
 	povmap `lhs' `_Xx' if `touse23'==1 [aw=`wvar'], area(`area') ///
 	varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest uniq(`uniqid') seed(`seed') stage(first) method(`method') new 
 
