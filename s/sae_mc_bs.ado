@@ -84,7 +84,7 @@ set more off
 		}
 	}
 	
-	if (`lavers'<17 & (`method'==2 | `method'==4)){
+	if (`lavers'<17 & (regexm("`method'", "lapacke")){
 		dis as error "Your stata version does not support the chosen matrix inversion method"
 		error 198
 		exit
