@@ -1389,13 +1389,7 @@ function _f_hh_gls2(real matrix y, real matrix x, real matrix wt, real matrix si
 		else{
 			if (el_m==1) _luinv(cv)
 			else{
-				if (el_m==2) 
-				else{
-					if (el_m==3) _cholinv(cv)
-					else{
-						if (el_m==4) 
-					}
-				}
+				if (el_m==3) _cholinv(cv)
 			}
 		}
 		xt     = quadcross(x1,cv)
@@ -1407,15 +1401,7 @@ function _f_hh_gls2(real matrix y, real matrix x, real matrix wt, real matrix si
 		if (el_m==0) _invsym(xtwex)
 		else{
 			if (el_m==1) _luinv(xtwex)
-			else{
-				if (el_m==2) _luinv_lapacke(xtwex)
-				else{
-					if (el_m==3) _cholinv(xtwex)
-					else{
-						if (el_m==4) _cholinvlapacke(xtwex)
-					}
-				}
-			}
+			else  _cholinv(xtwex)					
 		}
 		Beta2 = quadcross(xtwex,xtwey)
 		vcov2 = quadcross(quadcross((xtwex),xtwewx)',(xtwex))
