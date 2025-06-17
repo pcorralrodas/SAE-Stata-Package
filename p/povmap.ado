@@ -47,6 +47,11 @@ program define povmap, eclass byable(recall)
 	if ("`seed'"=="") local seed 123456789
 	set seed `seed'
 	
+	//Version issues with lapacke
+	if (`c(version)'<17){
+		dis as error "If you get an error about lapacke, make sure you have the newest version and run l/lsae_povmap_old.mata" 
+	}
+	
 	//Until vec is fixed.
 	local colprocess = 1
 	

@@ -1,4 +1,4 @@
-*! version 2.2.4  June 17, 2025
+*! version 2.2.5  June 17, 2025
 *! Minh Cong Nguyen - mnguyen3@worldbank.org
 *! Paul Andres Corral Rodas - pcorralrodas@worldbank.org
 *! Joao Pedro Azevedo - jazevedo@worldbank.org
@@ -223,9 +223,6 @@ set more off
 		local lnskew = 1
 	}
 	
-	if (`c(version)'<17){
-		dis as error "If you get an error about lapacke, make sure you have the newest version and run l/lsae_povmap_old.mata" 
-	}
 	povmap `lhs' `_Xx' if `touse23'==1 [aw=`wvar'], area(`area') ///
 	varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest uniq(`uniqid') seed(`seed') stage(first) method(`method') new 
 
@@ -485,6 +482,7 @@ qui{
 		//Benchmark
 		*=======================================================================
 		if (~missing("`benchmarklevel'")){
+		preserve
 			qui{
 				//Backtransform _Newy to get benchmark
 				tempvar tt grupo
@@ -520,6 +518,7 @@ qui{
 				rename `grupo' Unit2
 				save `thebm', replace
 			}
+		restore
 		} //end benchmark
 		
 		//FIt the model on the bootstrap data		
@@ -536,6 +535,12 @@ qui{
 			}
 		}
 		else{
+			if (_rc!=0){
+				dis as error "I've encountered a problem"
+				povmap _NeWy `_Xx' if `touse23'==1 [aw=`wvar'], area(`area') ///
+		varest(`varest') zvar(`zvar') yhat(`yhat') yhat2(`yhat2') ebest seed(`seed') uniq(`uniqid') stage(first) method(`method') new
+				exit
+			}
 			mata: betaA = st_matrix("e(b_gls)")
 			mata: alfaA = st_matrix("e(b_alpha)")
 			mata: varUA = *allest[3,1]
