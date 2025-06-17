@@ -128,12 +128,11 @@ version 16
 
 	sum Y, d
 	
-	//set trace on 
-	//set traced 2
+	
 
-	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(200) matin("$dpath\censo") ///
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(20) matin("$dpath\censo") ///
 	ind(FGT0 gini) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`=exp(2.808841548218)') ///
-	 lny s2s_spec method(luinv_la)
+	 bench(2) bm(fgt0 mean) wbm(hhsize) bcox lny s2s_spec method(luinv_la)
 	
 	
 	sss

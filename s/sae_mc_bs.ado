@@ -483,9 +483,9 @@ qui{
 		//Benchmark
 		*=======================================================================
 		if (~missing("`benchmarklevel'")){
-		tempfile labs
-		save `labs', replace
 			qui{
+				tempfile labs
+				save `labs', replace
 				//Backtransform _Newy to get benchmark
 				tempvar tt grupo
 				if (`bcox'==1 & `lny'==1 & `lnskew'==0){
@@ -578,8 +578,8 @@ qui{
 			else display "." _continue
 			if (~missing("`benchmarklevel'")){
 				qui{
-				save `labs', replace
 				gen double Unit2 = int(Unit/1e`benchmarklevel')
+				save `labs', replace				
 					merge m:1 Unit2 using `thebm'
 						drop if _m!=3
 						drop _m		
