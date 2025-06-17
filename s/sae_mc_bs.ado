@@ -374,9 +374,10 @@ qui{
 	}
 	
 	keep nSim Unit nHH nIn `_finvars'
-	gen double Unit2 = int(Unit/1e`benchmarklevel')
+	
 	if (~missing("`benchmarklevel'")){
 		qui{
+		gen double Unit2 = int(Unit/1e`benchmarklevel')	
 		preserve		
 			merge m:1 Unit2 using `thebm'
 				drop if _m!=3
@@ -574,10 +575,10 @@ qui{
 				display _n(0)
 			}
 			else display "." _continue
-			gen double Unit2 = int(Unit/1e`benchmarklevel')
 			if (~missing("`benchmarklevel'")){
 				qui{
-				preserve		
+				preserve	
+				gen double Unit2 = int(Unit/1e`benchmarklevel')
 					merge m:1 Unit2 using `thebm'
 						drop if _m!=3
 						drop _m		

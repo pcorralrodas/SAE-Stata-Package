@@ -21,6 +21,7 @@ cap program drop povmap
 program define povmap, eclass byable(recall) 
 	version 11, missing
 	
+	local lavers c(version)
 	mata st_local("StataVersion", lsae_povmapStataVersion()); st_local("CodeVersion", lsae_povmapVersion())
 	if `StataVersion' != c(stata_version) | "`CodeVersion'" < "00.06.00" {
 		cap findfile "lsae_povmap.mlib"
@@ -28,8 +29,14 @@ program define povmap, eclass byable(recall)
 			erase "`r(fn)'"
 			cap findfile "lsae_povmap.mlib"
 		}
-		qui findfile "lsae_povmap.mata"
-		run "`r(fn)'"
+		if (`lavers'>=17){
+			qui findfile "lsae_povmap.mata"
+			run "`r(fn)'"
+		}
+		else{
+			qui findfile "lsae_povmap_old.mata"
+			run "`r(fn)'"
+		}
 	}
 	
 	syntax varlist(min=2 numeric fv) [if] [in] [aw pw fw], area(varname numeric) ///
