@@ -483,7 +483,8 @@ qui{
 		//Benchmark
 		*=======================================================================
 		if (~missing("`benchmarklevel'")){
-		preserve
+		tempfile labs
+		save `labs', replace
 			qui{
 				//Backtransform _Newy to get benchmark
 				tempvar tt grupo
@@ -519,7 +520,7 @@ qui{
 				rename `grupo' Unit2
 				save `thebm', replace
 			}
-		restore
+		use `labs', replace
 		} //end benchmark
 		
 		//FIt the model on the bootstrap data		
@@ -577,7 +578,7 @@ qui{
 			else display "." _continue
 			if (~missing("`benchmarklevel'")){
 				qui{
-				preserve	
+				save `labs', replace
 				gen double Unit2 = int(Unit/1e`benchmarklevel')
 					merge m:1 Unit2 using `thebm'
 						drop if _m!=3
@@ -589,7 +590,7 @@ qui{
 						if (_rc) replace `x' = `x'/Mean
 					}
 				save `thebm', replace
-				restore
+				use `labs', clear
 					merge m:1 Unit2 using `thebm', keepusing(`tocollapse')
 						drop if _m==2
 						drop _m

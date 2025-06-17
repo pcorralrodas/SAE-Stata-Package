@@ -133,7 +133,7 @@ version 16
 
 	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(200) matin("$dpath\censo") ///
 	ind(FGT0 gini) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`=exp(2.808841548218)') ///
-	 bench(2) bm(fgt0 mean) wbm(hhsize) bcox lny s2s_spec method(luinv_la)
+	 lny s2s_spec method(luinv_la)
 	
 	
 	sss
