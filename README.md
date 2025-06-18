@@ -6,10 +6,22 @@ A family of Stata functions for small area estimation, implementing multiple met
 
 The package now includes significant methodological improvements:
 
-- **Revised Census EB Method**: A new implementation that shows substantial improvement over previous approaches
-- **Improved Error Estimation**: Better MSE estimation through parametric bootstrap procedures
-- **Enhanced Performance**: Significantly reduced bias and improved efficiency compared to previous methods
-- **Heteroskedasticity Handling**: Better incorporation of heteroskedasticity and survey weights
+- **Revised Census EB Method**: A new implementation that shows substantial improvement over previous approaches  
+- **Improved Error Estimation**: More accurate MSE estimation through parametric bootstrap procedures  
+- **Enhanced Performance**: Significantly reduced bias and improved efficiency compared to previous methods  
+- **Heteroskedasticity Handling**: Now incorporates heteroskedasticity and survey weights  
+
+### June 17, 2025 Update
+
+A substantial update was released on **June 17, 2025**, with the following improvements and fixes:
+
+1. **Compatibility with Older Stata Versions**  
+   Fixed an error affecting older versions of Stata (<17), where LAPACKE was not available and the `_f_hh_gls2()` function in Mata could not run.  
+   → Users of older Stata versions should run the script `l/lsae_povmap_old.mata` (one-time only) to resolve this issue.  
+
+2. **Experimental Benchmarking Functionality**  
+   Introduced an experimental benchmarking feature.  
+   → This allows small area estimates at lower geographic levels to align with official estimates when aggregated to the survey's level of representativeness. See help file for instructions on its implementation.
 
 ## Overview
 
