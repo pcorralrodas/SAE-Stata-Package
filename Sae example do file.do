@@ -4,7 +4,7 @@ clear all
 global dpath "C:\Users\\`c(username)'\OneDrive\WPS_2020\7.twofold\"
 
 
-
+run "C:\Users\WB378870\GitHub\SAE-Stata-Package\s\sae_data_import.ado"
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\s\sae_mc_bs.ado"
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\l\lsae_povmap.mata"
 run "C:\Users\WB378870\GitHub\SAE-Stata-Package\p\povmap.ado"
@@ -97,6 +97,8 @@ We start off by creating a fake data set as illustrated in that same paper.
 	restore
 	drop if HID==`=HID[1]'
 	
+	
+	
 	tempfile censo
 	save `censo'
 	
@@ -130,9 +132,9 @@ version 16
 	
 	
 
-	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(50) bsrep(20) matin("$dpath\censo") ///
-	ind(FGT0 gini) aggids(2 0) pwcensus(hhsize) uniqid(hhid) plines(`=exp(2.808841548218)') ///
-	 bench(2) bm(fgt0 mean) wbm(hhsize) bcox lny s2s_spec method(luinv_la)
+	sae sim h3 Y x1 x2, area(HID) yhat(uno) mcrep(5) bsrep(2) matin("$dpath\censo") ///
+	ind(FGT0 gini ge0 ge1 ge2) aggids(9 8 7 6 5 4 3 2 1 0) pwcensus(hhsize) uniqid(hhid) plinevar(pvar) ///
+	  lny s2s_spec method(luinv_la)
 	
 	
 	sss

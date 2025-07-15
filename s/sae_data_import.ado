@@ -58,6 +58,8 @@ program define sae_data_import
 	foreach var in `varlist' {
 		cap use `var' using "`datain'", clear
 		if _rc==0 {
+			qui: count if missing(`var')
+			if (`r(N)'>0) dis as error "Caution, `r(N)' observations are missing for `var'"
 			mata: st_view(all=., ., "`var'",.)
 			mata: fputmatrix(fh, all[indexsort]) 
 			mata: all=.
