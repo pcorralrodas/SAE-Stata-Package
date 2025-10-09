@@ -27,7 +27,7 @@ program sae, rclass
 	
 	cap findfile  "lsae_povmap.mlib"
 	if _rc{
-		if (`c(version)'>=17) local lsae_file lsae_povmap.mata
+		if (_caller()>=17) local lsae_file lsae_povmap.mata
 		else local lsae_file lsae_povmap_old.mata
 		cap findfile "`lsae_file'"
 		if _rc{
