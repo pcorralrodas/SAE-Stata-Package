@@ -103,8 +103,9 @@ We start off by creating a fake data set as illustrated in that same paper.
 	save `censo'
 	
 	preserve
-	sae data import, datain("`censo'") varlist(x1 x2 uno hhsize pvar weights) ///
-			area(HID) uniqid(hhid) dataout("$dpath\censo") 
+	tempfile matacenso
+	sae data import, datain(`censo') varlist(x1 x2 uno hhsize pvar weights) ///
+			area(HID) uniqid(hhid) dataout(`matacenso') 
 	restore	
 	
 	use `ladata', clear

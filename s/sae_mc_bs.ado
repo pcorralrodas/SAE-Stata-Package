@@ -195,18 +195,33 @@ set more off
 		bcskew0 double `Thedep' = (`lhs') if `touse23'==1
 		local lhs `Thedep'
 		local lambda = r(lambda)
+		if (`lambda'==.){
+			display as error "I cannot transform the dependent variable. Please revise."
+			error 198
+			exit
+		}
 	}
 	if (`lnskew'==1 & `lny'==1){
 		tempvar Thedep
 		lnskew0 double `Thedep' = exp(`lhs') if `touse23'==1
 		local lhs `Thedep'
 		local lambda = r(gamma)
+		if (`lambda'==.){
+			display as error "I cannot transform the dependent variable. Please revise."
+			error 198
+			exit
+		}
 	}
 	if (`lnskew'==1 & `lny'==0){
 		tempvar Thedep
 		lnskew0 double `Thedep' = `lhs' if `touse23'==1
 		local lhs `Thedep'
 		local lambda = r(gamma)
+		if (`lambda'==.){
+			display as error "I cannot transform the dependent variable. Please revise."
+			error 198
+			exit
+		}
 	}
 	if (`lnskew_w'==1 & `lny'==1){
 		tempvar Thedep
@@ -214,6 +229,11 @@ set more off
 		local lhs `Thedep'
 		local lambda = r(gamma)
 		local lnskew = 1
+		if (`lambda'==.){
+			display as error "I cannot transform the dependent variable. Please revise."
+			error 198
+			exit
+		}
 	}
 	if (`lnskew_w'==1 & `lny'==0){
 		tempvar Thedep
@@ -221,6 +241,11 @@ set more off
 		local lhs `Thedep'
 		local lambda = r(gamma)
 		local lnskew = 1
+		if (`lambda'==.){
+			display as error "I cannot transform the dependent variable. Please revise."
+			error 198
+			exit
+		}
 	}
 	
 	povmap `lhs' `_Xx' if `touse23'==1 [aw=`wvar'], area(`area') ///
